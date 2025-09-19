@@ -11,6 +11,7 @@ interface Product {
   price: number;
   image1: string;
   image2: string;
+  tag?: string; // optional tag (e.g. Best Seller, New, Limited Edition)
 }
 
 const products: Product[] = [
@@ -20,6 +21,7 @@ const products: Product[] = [
     price: 27,
     image1: "/images/prodcts/p1-.jpg",
     image2: "/images/prodcts/p1.jpg",
+    tag: "Best Seller",
   },
   {
     id: 2,
@@ -27,6 +29,7 @@ const products: Product[] = [
     price: 25,
     image1: "/images/prodcts/p2-.jpg",
     image2: "/images/prodcts/p2.jpg",
+    tag: "New",
   },
   {
     id: 3,
@@ -34,6 +37,7 @@ const products: Product[] = [
     price: 32,
     image1: "/images/prodcts/p3-.jpg",
     image2: "/images/prodcts/p3.jpg",
+    tag: "Limited",
   },
   {
     id: 4,
@@ -76,23 +80,35 @@ function ProductCard({ product }: { product: Product }) {
   const [hover, setHover] = useState(false);
 
   return (
-    <div
-      className="rounded-xl overflow-hidden cursor-pointer transition-transform hover:scale-105"
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-    >
-      <div className="relative w-full aspect-[3/4] bg-gray-100 rounded-xl overflow-hidden">
-        <Image
-          src={hover ? product.image2 : product.image1}
-          alt={product.name}
-          fill
-          className="object-cover transition duration-500"
-        />
+    <Link href={`/shop/${product.id}`}>
+      <div
+        className="rounded-xl overflow-hidden cursor-pointer transition-transform hover:scale-105"
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+      >
+        <div className="relative w-full aspect-[3/4] bg-gray-100 rounded-xl overflow-hidden">
+          <Image
+            src={hover ? product.image2 : product.image1}
+            alt={product.name}
+            fill
+            className="object-cover transition duration-500"
+          />
+
+          {/* 🔹 Tag Badge */}
+          {product.tag && (
+            <span className="absolute top-3 left-3 bg-black text-white text-xs md:text-sm px-3 py-1 rounded-sm uppercase font-light tracking-wide">
+              {product.tag}
+            </span>
+          )}
+        </div>
+
+        <div className="mt-3">
+          <h3 className="text-gray-800 font-medium capitalize">
+            {product.name}
+          </h3>
+          <p className="text-gray-600">${product.price.toFixed(2)}</p>
+        </div>
       </div>
-      <div className="mt-3">
-        <h3 className="text-gray-800 font-medium capitalize">{product.name}</h3>
-        <p className="text-gray-600">${product.price.toFixed(2)}</p>
-      </div>
-    </div>
+    </Link>
   );
 }

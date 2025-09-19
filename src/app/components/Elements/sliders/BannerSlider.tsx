@@ -12,10 +12,10 @@ import { motion, AnimatePresence } from "framer-motion";
 const slides = [
   {
     id: 1,
-    title: "Discover Your Style",
+    title: "win the Next Style",
     description: "Explore the latest trends and find your perfect look.",
     image:
-      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1920&q=80",
+      "/images/banners/hjkdhjkah.jpg",
   },
   {
     id: 2,
@@ -85,7 +85,7 @@ export default function HeroBanner() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -50, opacity: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
-            className="text-5xl font-bold mb-4 drop-shadow-lg"
+            className="text-5xl font-bold mb-4 uppercase drop-shadow-lg"
           >
             {slides[0].title}
           </motion.h1>

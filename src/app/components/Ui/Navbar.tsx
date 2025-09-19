@@ -1,17 +1,28 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { Heart } from "lucide-react";
+import { Heart, Menu, X } from "lucide-react";
 import gsap from "gsap";
 import { motion } from "framer-motion";
+import Image from "next/image";
+
+// 🔹 Define navigation links
+const navLinks = [
+  { name: "Home", href: "/" },
+  { name: "Men", href: "/Men" },
+  { name: "Women", href: "/Women" },
+  { name: "New Arrivals ", href: "/New Arrivals " },
+  { name: "Contact", href: "/contact-Us" },
+];
 
 export default function Navbar() {
   const navRef = useRef<HTMLDivElement>(null);
   const linksRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  // GSAP animations for entry
+  // GSAP animations for entry (desktop)
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.from(logoRef.current, {
@@ -34,7 +45,7 @@ export default function Navbar() {
     return () => ctx.revert();
   }, []);
 
-  // Navbar scroll effect (keeps rounded)
+  // Navbar scroll effect
   useEffect(() => {
     const handleScroll = () => {
       if (navRef.current) {
@@ -59,46 +70,50 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav
-      className="w-full fixed top-4 flex justify-center z-50 transition-all duration-300"
-    >
+    <nav className="w-full fixed top-4 flex justify-center z-50 transition-all duration-300">
       <div
         ref={navRef}
-        className="flex items-center justify-between w-[95%] max-w-6xl px-10 py-3 rounded-full border border-gray-200 bg-gray-100/80 transition-all duration-300"
+        className="flex items-center justify-between w-[95%] max-w-6xl px-4 md:px-10 py-3 rounded-full border border-gray-200 bg-gray-100/80 transition-all duration-300"
       >
         {/* Logo */}
-        <div ref={logoRef} className="flex items-center gap-2 cursor-pointer">
-          <div className="bg-green-900 text-white w-10 h-10 flex items-center justify-center rounded-full font-bold text-lg">
-            *
-          </div>
-          <span className="text-green-900 font-bold text-2xl">Next Win</span>
+        <div
+          ref={logoRef}
+          className="flex items-center gap-2 cursor-pointer select-none"
+        >
+                    <Image
+                      src="/images/logo/main logo.jpg"
+                      alt="Next Win Logo"
+                      width={50}
+                      height={50}
+                      className="object-contain"
+                    />
         </div>
 
-        {/* Links */}
+        {/* Links (Desktop) */}
         <div
           ref={linksRef}
-          className="flex items-center gap-10 text-green-900 font-medium"
+          className="hidden md:flex items-center gap-6 lg:gap-10 text-green-900 font-medium"
         >
-          {["home", "shop", "about"].map((link) => (
+          {navLinks.map((link) => (
             <motion.div
-              key={link}
+              key={link.name}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               className="relative group"
             >
               <Link
-                href={link === "home" ? "/" : `/${link}`}
-                className="transition-colors duration-300 hover:text-orange-600"
+                href={link.href}
+                className="transition-colors duration-300 hover:text-orange-600 capitalize"
               >
-                {link}
+                {link.name}
               </Link>
               <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-orange-600 transition-all duration-300 group-hover:w-full"></span>
             </motion.div>
           ))}
         </div>
 
-        {/* Right side */}
-        <div className="flex items-center gap-8 text-green-900">
+        {/* Right side (Desktop) */}
+        <div className="hidden md:flex items-center gap-6 lg:gap-8 text-green-900">
           <motion.div whileHover={{ scale: 1.1 }}>
             <Link
               href="/login"
@@ -118,7 +133,42 @@ export default function Navbar() {
             </span>
           </motion.div>
         </div>
+
+        {/* Mobile Menu Button */}
+        <button
+          className="md:hidden text-green-900"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          {menuOpen ? <X size={26} /> : <Menu size={26} />}
+        </button>
       </div>
+
+      {/* Mobile Menu Drawer */}
+      {menuOpen && (
+        <div className="absolute top-20 w-[90%] max-w-sm bg-white shadow-lg rounded-xl p-6 flex flex-col gap-6 text-green-900 font-medium md:hidden">
+          {navLinks.map((link) => (
+            <Link
+              key={link.name}
+              href={link.href}
+              className="transition-colors duration-300 hover:text-orange-600 capitalize"
+              onClick={() => setMenuOpen(false)}
+            >
+              {link.name}
+            </Link>
+          ))}
+          <Link
+            href="/login"
+            className="transition-colors duration-300 hover:text-orange-600"
+            onClick={() => setMenuOpen(false)}
+          >
+            log in
+          </Link>
+          <div className="flex items-center gap-3 cursor-pointer">
+            <Heart size={22} className="hover:text-orange-600 transition" />
+            <span>Wishlist (0)</span>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
