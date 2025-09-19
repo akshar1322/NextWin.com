@@ -1,37 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌐 Project – nextwin
 
-## Getting Started
+![SplitsX Logo]data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTA5IiBoZWlnaHQ9IjEyMTIiIHZpZXdCb3g9IjAgMCA5MDkgMTIxMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iOTA5IiBoZWlnaHQ9IjEyMTIiIGZpbGw9IiMwMDAiLz48dGV4dCB4PSIxNTAiIHk9IjYwMCIgZm9udC1zaXplPSIxNDBweCIgZmlsbD0id2hpdGUiPlNQTElUWDwvdGV4dD48L3N2Zz4=`;
 
-First, run the development server:
+
+This project was developed by **SplitsX** for **nextwin**.
+It is a modern, scalable, and responsive **website / web application** built with the latest technologies.
+
+---
+
+## 📌 Client Info
+- **Company:** nextwin
+- **Website:** https://client.example.com
+- **Industry:** Clothing
+
+---
+
+## 🛠️ Technologies Used
+- Next.js
+- Tailwind CSS
+- MongoDB
+- CSS
+- React
+- Node.js
+- Vercel
+- Web3Forms
+- JWT Auth
+- Git
+
+---
+
+## 🚀 Features
+- ✅ Responsive modern design
+- ✅ SEO-friendly & fast performance
+- ✅ Admin panel for content management
+- ✅ Secure authentication system
+- ✅ Database-driven dynamic content
+
+---
+
+## 🏗️ Installation
+Clone the repository and install dependencies:
 
 ```bash
+git clone https://github.com/akshar1322/NextWin
+cd nextwin
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 👨‍💻 Developer Info
+- **Company:** SplitsX
+- **Email:** aksharpatel528@gmail.com
+- **WhatsApp:** +91-6353191174
+- **Website:** https://splitxcom.vercel.app/
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# NextWin.com
+💡 This project was proudly built with ❤️ by SplitX – delivering modern web solutions.
