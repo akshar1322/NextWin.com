@@ -4,7 +4,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-const products = [
+// ✅ Define product type
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  image1: string;
+  image2: string;
+}
+
+const products: Product[] = [
   {
     id: 1,
     name: "radiant renewal serum",
@@ -46,11 +55,10 @@ export default function BestSeller() {
 
         <Link
           href="/shop"
-          className="px-9 py-4 text-sm md:text-xl  border border-border-gray-800 rounded-xl text-gray-800 font-medium transition hover:bg-gray-800 hover:text-white hover:border-gray-800 hover:rounded-full "
+          className="px-9 py-4 text-sm md:text-xl border border-gray-800 rounded-xl text-gray-800 font-medium transition hover:bg-gray-800 hover:text-white hover:rounded-full"
         >
           View more
         </Link>
-
       </div>
 
       {/* Products */}
@@ -63,7 +71,8 @@ export default function BestSeller() {
   );
 }
 
-function ProductCard({ product }: { product: any }) {
+// ✅ Strongly typed props
+function ProductCard({ product }: { product: Product }) {
   const [hover, setHover] = useState(false);
 
   return (
@@ -81,9 +90,7 @@ function ProductCard({ product }: { product: any }) {
         />
       </div>
       <div className="mt-3">
-        <h3 className="text-gray-800 font-medium capitalize">
-          {product.name}
-        </h3>
+        <h3 className="text-gray-800 font-medium capitalize">{product.name}</h3>
         <p className="text-gray-600">${product.price.toFixed(2)}</p>
       </div>
     </div>
