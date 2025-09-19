@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import LenisProvider from "./components/providers/LenisProvider";
+import type { ReactNode } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,13 +18,14 @@ export const metadata = {
   description: "A Next win",
 };
 
-export default function RootLayout({ children }) {
+// ✅ Explicitly type props
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <LenisProvider>{children} </LenisProvider>
+        <LenisProvider>{children}</LenisProvider>
       </body>
     </html>
   );
