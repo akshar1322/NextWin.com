@@ -59,10 +59,11 @@ export default function BestSeller() {
 
         <Link
           href="/shop"
-          className="px-9 py-4 text-sm md:text-xl border border-gray-800 rounded-xl text-gray-800 font-medium transition hover:bg-gray-800 hover:text-white hover:rounded-full"
+          className="px-4 sm:px-6 py-2 sm:py-3 lg:py-4 text-xs sm:text-sm md:text-base lg:text-lg border border-gray-800 rounded-lg sm:rounded-xl text-gray-800 font-medium transition hover:bg-gray-800 hover:text-white hover:rounded-full"
         >
-          View more
+          View More
         </Link>
+
       </div>
 
       {/* Products */}

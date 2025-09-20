@@ -10,7 +10,9 @@ const page = () => {
     <>
       <main className=' bg-[#EEEEEE]  overflow-hidden ' >
         <Navbar/>
-        <Homepage/>
+        <div className=' mt-6 sm:mt-14 lg:mt-16' >
+          <Homepage/>
+        </div>
         <Footer/>
       </main>
     </>

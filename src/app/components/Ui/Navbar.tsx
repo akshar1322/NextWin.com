@@ -10,9 +10,9 @@ import Image from "next/image";
 // 🔹 Define navigation links
 const navLinks = [
   { name: "Home", href: "/" },
-  { name: "Men", href: "/Men" },
-  { name: "Women", href: "/Women" },
-  { name: "New Arrivals ", href: "/New Arrivals " },
+  { name: "Men", href: "/men" },
+  { name: "Women", href: "/women" },
+  { name: "New Arrivals ", href: "/newarrivals" },
   { name: "Contact", href: "/contact-Us" },
 ];
 

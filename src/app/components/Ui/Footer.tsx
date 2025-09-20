@@ -99,13 +99,13 @@ export default function Footer() {
               <input
                 type="checkbox"
                 required
-                className="scale-125 accent-orange-500"
+                className="scale-125 cursor-pointer accent-orange-500"
               />
               Yes, subscribe me to your newsletter.
             </label>
             <button
               type="submit"
-              className="bg-orange-500 text-black font-bold px-7 py-4 rounded-md text-xl hover:bg-orange-400 active:scale-95 transition"
+              className="bg-orange-500 text-black cursor-pointer font-bold px-7 py-4 rounded-md text-xl hover:bg-orange-400 active:scale-95 transition"
             >
               Subscribe
             </button>
