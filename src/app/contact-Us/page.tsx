@@ -3,8 +3,9 @@
 import Image from "next/image";
 import { useState } from "react";
 import countries from "@/lib/countries";
-import Navbar from "@/app/components/Ui/Navbar";
-import Footer from "@/app/components/Ui/Footer";
+import Navbar from "@/components/Ui/Navbar";
+import Footer from "@/components/Ui/Footer";
+
 
 export default function ContactPage() {
   const [selectedLocation, setSelectedLocation] = useState(0);
@@ -23,13 +24,13 @@ export default function ContactPage() {
 
   return (
     <>
-      <main className="bg-white text-black min-h-screen flex flex-col">
+      <main className="bg-[#EEEEEE] text-black">
         {/* ✅ Navbar */}
         <header>
           <Navbar />
         </header>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-20 sm:py-28 lg:py-32 space-y-14">
+        <div className="max-w-10xl mx-auto px-4 sm:px-6 lg:px-12 py-20 sm:py-28 lg:py-32 space-y-14">
           {/* Heading */}
           <div className="text-center space-y-4 px-2">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold">
@@ -87,13 +88,13 @@ export default function ContactPage() {
                     name="firstName"
                     required
                     placeholder="First Name"
-                    className="bg-white text-black border p-3 rounded-md w-full"
+                    className="bg-[#EEEEEE] text-black border p-3 rounded-md w-full"
                   />
                   <input
                     name="lastName"
                     required
                     placeholder="Last Name"
-                    className="bg-white text-black border p-3 rounded-md w-full"
+                    className="bg-[#EEEEEE] text-black border p-3 rounded-md w-full"
                   />
                 </div>
 
@@ -103,13 +104,13 @@ export default function ContactPage() {
                     type="email"
                     required
                     placeholder="Email"
-                    className="bg-white text-black border p-3 rounded-md w-full"
+                    className="bg-[#EEEEEE] text-black border p-3 rounded-md w-full"
                   />
                   <div className="flex gap-2">
                     <select
                       name="countryCode"
                       required
-                      className="bg-white text-black border p-3 rounded-md w-1/3"
+                      className="bg-[#EEEEEE] text-black border p-3 rounded-md w-1/3"
                     >
                       {countries.map((country) => (
                         <option key={country.code} value={country.code}>
@@ -121,7 +122,7 @@ export default function ContactPage() {
                       name="phone"
                       required
                       placeholder="Phone Number"
-                      className="bg-white text-black border p-3 rounded-md w-2/3"
+                      className="bg-[#EEEEEE] text-black border p-3 rounded-md w-2/3"
                     />
                   </div>
                 </div>
@@ -130,7 +131,7 @@ export default function ContactPage() {
                   name="message"
                   placeholder="Your Message"
                   required
-                  className="bg-white text-black border p-3 rounded-md w-full h-32"
+                  className="bg-[#EEEEEE] text-black border p-3 rounded-md w-full h-32"
                 />
 
                 <button

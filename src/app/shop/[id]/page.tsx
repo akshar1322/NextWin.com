@@ -4,55 +4,12 @@ import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import Footer from "@/app/components/Ui/Footer";
-import Navbar from "@/app/components/Ui/Navbar";
+import { products } from "@/data/products";
+import Navbar from "@/components/Ui/Navbar";
+import Footer from "@/components/Ui/Footer";
 
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  description: string;
-  images: string[];
-  tag?: string;
-}
-
-const products: Product[] = [
-  {
-    id: 1,
-    name: "radiant renewal serum",
-    price: 27,
-    description:
-      "A revitalizing serum designed to restore your skin’s natural glow. Infused with botanical extracts for deep hydration.",
-    images: ["/images/prodcts/p1-.jpg", "/images/prodcts/p1.jpg"],
-    tag: "Best Seller",
-  },
-  {
-    id: 2,
-    name: "luminous eye cream",
-    price: 25,
-    description:
-      "Brightening eye cream that reduces puffiness and dark circles while keeping delicate skin nourished.",
-    images: ["/images/prodcts/p2-.jpg", "/images/prodcts/p2.jpg"],
-    tag: "New",
-  },
-  {
-    id: 3,
-    name: "hydraglow moisturizer",
-    price: 32,
-    description:
-      "A lightweight moisturizer that locks in hydration and leaves your skin looking plump and radiant.",
-    images: ["/images/prodcts/p3-.jpg", "/images/prodcts/p3.jpg"],
-    tag: "Limited",
-  },
-  {
-    id: 4,
-    name: "radiance cleanser",
-    price: 35,
-    description:
-      "A gentle foaming cleanser that removes impurities while maintaining your skin’s natural moisture balance.",
-    images: ["/images/prodcts/p1-.jpg", "/images/prodcts/p4.jpg"],
-  },
-];
+import { FaAmazon, FaShoppingBag } from "react-icons/fa";
+import { SiFlipkart } from "react-icons/si";
 
 export default function ProductDetailsPage() {
   const { id } = useParams();
@@ -72,7 +29,7 @@ export default function ProductDetailsPage() {
     <>
       <Navbar />
 
-      <div className="w-full bg-white text-black px-4 sm:px-8 md:px-20 py-10 sm:py-16">
+      <div className="w-full bg-[#EEEEEE] text-black px-4 sm:px-8 md:px-20 py-10 sm:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
           {/* Left: Images */}
           <div>
@@ -116,21 +73,35 @@ export default function ProductDetailsPage() {
               {product.description}
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 mt-8 sm:mt-10">
-              <Link
-                href={`https://wa.me/1234567890?text=Hi, I'm interested in ${product.name}`}
-                target="_blank"
-                className="px-5 sm:px-6 py-3 bg-black text-white text-base sm:text-lg rounded-full hover:bg-gray-800 transition text-center"
-              >
-                WhatsApp Inquiry
-              </Link>
-              <Link
-                href={`/enquiry?product=${product.name}`}
-                target="_blank"
-                className="px-5 sm:px-6 py-3 border border-black text-base sm:text-lg rounded-full hover:bg-black hover:text-white transition text-center"
-              >
-                Email Inquiry
-              </Link>
+            {/* Affiliate Links */}
+            <div className="flex gap-4 mt-6">
+              {product.affiliates.amazon && (
+                <Link
+                  href={product.affiliates.amazon}
+                  target="_blank"
+                  className="flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-gray-100"
+                >
+                  <FaAmazon className="text-xl text-yellow-600" /> Amazon
+                </Link>
+              )}
+              {product.affiliates.flipkart && (
+                <Link
+                  href={product.affiliates.flipkart}
+                  target="_blank"
+                  className="flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-gray-100"
+                >
+                  <SiFlipkart className="text-xl text-blue-600" /> Flipkart
+                </Link>
+              )}
+              {product.affiliates.myntra && (
+                <Link
+                  href={product.affiliates.myntra}
+                  target="_blank"
+                  className="flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-gray-100"
+                >
+                  <FaShoppingBag className="text-xl text-pink-600" /> Myntra
+                </Link>
+              )}
             </div>
           </div>
         </div>
@@ -138,11 +109,7 @@ export default function ProductDetailsPage() {
         {/* Accordions */}
         <div className="mt-16 sm:mt-20 border-t border-gray-200 pt-8 sm:pt-12 space-y-4 sm:space-y-6">
           {[
-            {
-              title: "Product Information",
-              content:
-                "This section holds details about ingredients, usage, and product benefits. You can expand it to include everything customers need to know.",
-            },
+            { title: "Product Information", content: product.description },
             {
               title: "Return & Refund Policy",
               content:

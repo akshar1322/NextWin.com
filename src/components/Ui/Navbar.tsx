@@ -51,13 +51,13 @@ export default function Navbar() {
       if (navRef.current) {
         if (window.scrollY > 20) {
           navRef.current.classList.add(
-            "bg-white/90",
+            "bg-[#EEEEEE]/90",
             "backdrop-blur-md",
             "shadow-lg"
           );
         } else {
           navRef.current.classList.remove(
-            "bg-white/90",
+            "bg-[#EEEEEE]/90",
             "backdrop-blur-md",
             "shadow-lg"
           );
@@ -145,7 +145,7 @@ export default function Navbar() {
 
       {/* Mobile Menu Drawer */}
       {menuOpen && (
-        <div className="absolute top-20 w-[90%] max-w-sm bg-white shadow-lg rounded-xl p-6 flex flex-col gap-6 text-green-900 font-medium md:hidden">
+        <div className="absolute top-20 w-[90%] max-w-sm bg-[#EEEEEE] shadow-lg rounded-xl p-6 flex flex-col gap-6 text-green-900 font-medium md:hidden">
           {navLinks.map((link) => (
             <Link
               key={link.name}

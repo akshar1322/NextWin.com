@@ -1,8 +1,8 @@
 
 import React from 'react'
 import Homepage from '../home/page'
-import Navbar from './components/Ui/Navbar'
-import Footer from './components/Ui/Footer'
+import Navbar from '../components/Ui/Navbar'
+import Footer from '../components/Ui/Footer'
 
 
 const page = () => {

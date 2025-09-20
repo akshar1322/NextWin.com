@@ -1,8 +1,8 @@
 import React from "react";
-import HeroBanner from "../app/components/Elements/sliders/BannerSlider";
-import BestSeller from "../app/components/cards/Best-Seller";
-import ShopByCategory from "@/app/components/Elements/ShopByCategory";
-import InstagramSection from "@/app/components/Ui/ig";
+import HeroBanner from "../components/Elements/sliders/BannerSlider";
+import BestSeller from "../components/cards/Best-Seller";
+import ShopByCategory from "@/components/Elements/ShopByCategory";
+import InstagramSection from "@/components/Ui/ig";
 
 const Homepage = () => {
   return (
