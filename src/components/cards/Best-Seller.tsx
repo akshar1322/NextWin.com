@@ -4,14 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-// ✅ Define product type
+// ✅ Product type
 interface Product {
   id: number;
   name: string;
   price: number;
   image1: string;
   image2: string;
-  tag?: string; // optional tag (e.g. Best Seller, New, Limited Edition)
+  tag?: string; // optional tag
 }
 
 const products: Product[] = [
@@ -50,24 +50,23 @@ const products: Product[] = [
 
 export default function BestSeller() {
   return (
-    <section className="w-full px-8 py-16">
+    <section className="w-full px-4 sm:px-6 lg:px-8 py-12">
       {/* Header */}
-      <div className="flex items-center justify-between mb-10">
-        <h2 className="text-5xl md:text-6xl font-bold text-gray-900">
+      <div className="flex items-center justify-between mb-8">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900">
           Best Seller
         </h2>
 
         <Link
           href="/shop"
-          className="px-4 sm:px-6 py-2 sm:py-3 lg:py-4 text-xs sm:text-sm md:text-base lg:text-lg border border-gray-800 rounded-lg sm:rounded-xl text-gray-800 font-medium transition hover:bg-gray-800 hover:text-white hover:rounded-full"
+          className="px-4 sm:px-6 py-2 sm:py-3 lg:py-4 text-xs sm:text-sm md:text-base lg:text-lg border border-gray-800 rounded-lg text-gray-800 font-medium transition hover:bg-gray-800 hover:text-white hover:rounded-full"
         >
           View More
         </Link>
-
       </div>
 
       {/* Products */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
@@ -76,7 +75,7 @@ export default function BestSeller() {
   );
 }
 
-// ✅ Strongly typed props
+// ✅ Product Card
 function ProductCard({ product }: { product: Product }) {
   const [hover, setHover] = useState(false);
 
@@ -87,6 +86,7 @@ function ProductCard({ product }: { product: Product }) {
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
+        {/* Product Image */}
         <div className="relative w-full aspect-[3/4] bg-gray-100 rounded-xl overflow-hidden">
           <Image
             src={hover ? product.image2 : product.image1}
@@ -97,17 +97,20 @@ function ProductCard({ product }: { product: Product }) {
 
           {/* 🔹 Tag Badge */}
           {product.tag && (
-            <span className="absolute top-3 left-3 bg-black text-white text-xs md:text-sm px-3 py-1 rounded-sm uppercase font-light tracking-wide">
+            <span className="absolute top-3 left-3 bg-gray-900/80 text-white text-[10px] sm:text-xs px-2 sm:px-3 py-0.5 sm:py-1 rounded-md uppercase font-medium tracking-wide">
               {product.tag}
             </span>
           )}
         </div>
 
-        <div className="mt-3">
-          <h3 className="text-gray-800 font-medium capitalize">
+        {/* Product Info */}
+        <div className="mt-2 sm:mt-3 text-center md:text-left">
+          <h3 className="text-gray-800 font-medium capitalize text-sm sm:text-base">
             {product.name}
           </h3>
-          <p className="text-gray-600">${product.price.toFixed(2)}</p>
+          <p className="text-gray-600 text-sm sm:text-base">
+            ${product.price.toFixed(2)}
+          </p>
         </div>
       </div>
     </Link>

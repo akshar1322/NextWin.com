@@ -4,12 +4,6 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 
-/**
- * Each category has:
- * - bg: initial background color for the card
- * - hover: the hover background class (must include "hover:" so Tailwind sees it)
- * - btnHover: group-hover class for the button (must include "group-hover:")
- */
 const categories = [
   {
     name: "New Arrivals",
@@ -17,7 +11,7 @@ const categories = [
     img: "/images/prodcts/p1.jpg",
     bg: "bg-[#EEEEEE]",
     hover: "hover:bg-green-200",
-    btnHover: "group-hover:bg-green-600",
+    btnHover: "group-hover:bg-green-600 group-hover:text-white",
   },
   {
     name: "Women",
@@ -25,7 +19,7 @@ const categories = [
     img: "/images/prodcts/p2.jpg",
     bg: "bg-[#EEEEEE]",
     hover: "hover:bg-pink-200",
-    btnHover: "group-hover:bg-pink-600",
+    btnHover: "group-hover:bg-pink-600 group-hover:text-white",
   },
   {
     name: "Men",
@@ -33,16 +27,16 @@ const categories = [
     img: "/images/prodcts/p3.jpg",
     bg: "bg-[#EEEEEE]",
     hover: "hover:bg-blue-200",
-    btnHover: "group-hover:bg-blue-600",
+    btnHover: "group-hover:bg-blue-600 group-hover:text-white",
   },
 ];
 
 export default function ShopByCategory() {
   return (
-    <section className="py-1 px-4 md:px-4 lg:px-20 text-black">
+    <section className="py-10 px-4 sm:px-6 lg:px-20 text-black">
+      {/* Heading */}
       <motion.h2
-        className="text-4xl md:text-5xl right-15
-         font-bold  mb-12"
+        className="text-3xl sm:text-4xl md:text-5xl font-bold mb-10 text-center lg:text-left"
         initial={{ opacity: 0, y: -20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -51,16 +45,17 @@ export default function ShopByCategory() {
         Shop by Category
       </motion.h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-full mx-auto">
+      {/* Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-7xl mx-auto">
         {categories.map((cat) => (
           <motion.div
             key={cat.name}
             whileHover={{ scale: 1.02 }}
             className={`group rounded-2xl transition-all duration-300 cursor-pointer ${cat.bg} ${cat.hover} p-4`}
           >
-            {/* Inner white frame so outer bg is visible as a colored border */}
-            <div className="bg-transparent rounded-xl overflow-hidden p-3">
-              <div className="relative w-full h-[480px] sm:h-[580px] rounded-lg overflow-hidden">
+            {/* Inner Frame */}
+            <div className="rounded-xl overflow-hidden p-3">
+              <div className="relative w-full h-64 sm:h-96 lg:h-[580px] rounded-lg overflow-hidden">
                 <Image
                   src={cat.img}
                   alt={cat.name}
@@ -70,11 +65,11 @@ export default function ShopByCategory() {
               </div>
             </div>
 
-            {/* Button area — uses group-hover to change color on parent hover */}
-            <div className="w-full py-6 flex justify-center bg-transparent">
+            {/* Button */}
+            <div className="w-full py-6 flex justify-center">
               <Link
                 href={cat.href}
-                className={`border border-black px-10 py-2 rounded-2xl font-medium text-lg transition  group-hover:text-black`}
+                className={`border border-black px-8 sm:px-10 py-2 rounded-2xl font-medium text-base sm:text-lg transition ${cat.btnHover}`}
               >
                 {cat.name}
               </Link>
