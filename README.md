@@ -54,6 +54,6 @@ npm run dev
 - **Company:** SplitsX
 - **Email:** aksharpatel528@gmail.com
 - **WhatsApp:** +91-6353191174
-- **Website:** https://splitxcom.vercel.app/
+- **Website:**https://splisxstudio.wixstudio.com/splisxstudio
 
 💡 This project was proudly built with ❤️ by SplitX – delivering modern web solutions.
