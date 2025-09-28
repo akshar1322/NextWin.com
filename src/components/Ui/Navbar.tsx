@@ -7,13 +7,15 @@ import gsap from "gsap";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
-// 🔹 Define navigation links
+// ✅ React Icons
+import { FaHome, FaMale, FaFemale, FaRegStar, FaPhoneAlt } from "react-icons/fa";
+
 const navLinks = [
-  { name: "Home", href: "/" },
-  { name: "Men", href: "/men" },
-  { name: "Women", href: "/women" },
-  { name: "New Arrivals ", href: "/newarrivals" },
-  { name: "Contact", href: "/contact-Us" },
+  { name: "Home", href: "/", icon: <FaHome size={20} /> },
+  { name: "Men", href: "/men", icon: <FaMale size={20} /> },
+  { name: "Women", href: "/women", icon: <FaFemale size={20} /> },
+  { name: "New Arrivals", href: "/newarrivals", icon: <FaRegStar size={20} /> },
+  { name: "Contact", href: "/contact-Us", icon: <FaPhoneAlt size={20} /> },
 ];
 
 export default function Navbar() {
@@ -22,7 +24,7 @@ export default function Navbar() {
   const logoRef = useRef<HTMLDivElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // GSAP animations for entry (desktop)
+  // GSAP animations
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.from(logoRef.current, {
@@ -45,7 +47,7 @@ export default function Navbar() {
     return () => ctx.revert();
   }, []);
 
-  // Navbar scroll effect
+  // Scroll effect
   useEffect(() => {
     const handleScroll = () => {
       if (navRef.current) {
@@ -80,16 +82,16 @@ export default function Navbar() {
           ref={logoRef}
           className="flex items-center gap-2 cursor-pointer select-none"
         >
-                    <Image
-                      src="/images/logo/main logo.jpg"
-                      alt="Next Win Logo"
-                      width={50}
-                      height={50}
-                      className="object-contain"
-                    />
+          <Image
+            src="/images/logo/main logo.jpg"
+            alt="Next Win Logo"
+            width={50}
+            height={50}
+            className="object-contain"
+          />
         </div>
 
-        {/* Links (Desktop) */}
+        {/* Links (Desktop with icons) */}
         <div
           ref={linksRef}
           className="hidden md:flex items-center gap-6 lg:gap-10 text-green-900 font-medium"
@@ -103,23 +105,23 @@ export default function Navbar() {
             >
               <Link
                 href={link.href}
-                className="transition-colors duration-300 hover:text-orange-600 capitalize"
+                className="transition-colors duration-300 hover:text-orange-600 flex items-center gap-2"
               >
-                {link.name}
+                {link.icon}
               </Link>
               <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-orange-600 transition-all duration-300 group-hover:w-full"></span>
             </motion.div>
           ))}
         </div>
 
-        {/* Right side (Desktop) */}
+        {/* Right side */}
         <div className="hidden md:flex items-center gap-6 lg:gap-8 text-green-900">
           <motion.div whileHover={{ scale: 1.1 }}>
             <Link
               href="/login"
               className="transition-colors duration-300 hover:text-orange-600"
             >
-              log in
+              🔑
             </Link>
           </motion.div>
 
@@ -150,18 +152,19 @@ export default function Navbar() {
             <Link
               key={link.name}
               href={link.href}
-              className="transition-colors duration-300 hover:text-orange-600 capitalize"
+              className="transition-colors duration-300 hover:text-orange-600 flex items-center gap-3"
               onClick={() => setMenuOpen(false)}
             >
-              {link.name}
+              {link.icon}
+              <span>{link.name}</span>
             </Link>
           ))}
           <Link
             href="/login"
-            className="transition-colors duration-300 hover:text-orange-600"
+            className="transition-colors duration-300 hover:text-orange-600 flex items-center gap-3"
             onClick={() => setMenuOpen(false)}
           >
-            log in
+            🔑 <span>Log in</span>
           </Link>
           <div className="flex items-center gap-3 cursor-pointer">
             <Heart size={22} className="hover:text-orange-600 transition" />
