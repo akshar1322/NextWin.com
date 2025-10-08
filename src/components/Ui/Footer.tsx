@@ -13,8 +13,6 @@ const footerLinks = [
     links: [
       { name: "Instagram", href: "https://www.instagram.com" },
       { name: "X", href: "https://x.com" },
-      { name: "Bēhance", href: "https://www.behance.net" },
-      { name: "Dribbble", href: "https://dribbble.com/" },
     ],
   },
   {
@@ -25,10 +23,10 @@ const footerLinks = [
       { name: "Shop", href: "/shop" },
     ],
   },
-  {
-    title: "PARTNERS",
-    links: [{ name: "abd", href: "#" }],
-  },
+  // {
+  //   title: "PARTNERS",
+  //   links: [{ name: "abd", href: "#" }],
+  // },
 ];
 
 export default function Footer() {

@@ -24,7 +24,6 @@ export default function MenPage() {
                     <div className=' mt-6 sm:mt-14 lg:mt-16'>
                             <BannerSlider slides={menSlides} />
                     </div>
-    <BannerSlider slides={menSlides} />
     <section className="w-full px-8 bg-[#EEEEEE] text-black py-16">
       <h2 className="text-5xl font-bold mt-10 mb-10">{`Men's`} </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">

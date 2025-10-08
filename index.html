@@ -1,0 +1,196 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NEXT WIN - Mobile</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --black:#0e0e0e; --muted:#9b9b9b; --accent:#111;
+      --bg:#ffffff; --card:#f7f7f7; --radius:12px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial; background:var(--bg);color:#111}/* container */
+.wrap{max-width:480px;margin:18px auto;padding:16px}
+
+/* header */
+header{display:flex;align-items:center;justify-content:space-between;background:var(--accent);color:#fff;padding:14px 16px;border-radius:10px}
+.brand{font-weight:800;letter-spacing:1px;font-size:20px}
+.navicons{display:flex;gap:12px;align-items:center}
+.icon{width:28px;height:28px;display:inline-grid;place-items:center;border-radius:6px;background:transparent;color:#fff}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;margin:16px 0}
+.hero .title{font-size:26px;font-weight:800;line-height:1;margin:0}
+.hero .cta{padding:10px 12px;border-radius:8px;background:#fff;color:var(--accent);font-weight:700}
+
+/* sections */
+.section-title{font-size:18px;font-weight:700;margin:20px 0 12px}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.card{background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 6px 18px rgba(10,10,10,0.06);text-align:center;padding:10px}
+.card img{width:100%;height:140px;object-fit:cover;border-radius:8px}
+.card .label{font-weight:700;margin-top:8px}
+.card .price{color:var(--muted);margin-top:6px}
+
+/* product row for featured horizontal */
+.featured{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px}
+.featured .fcard{min-width:160px;background:#fff;border-radius:10px;padding:8px;box-shadow:0 6px 14px rgba(10,10,10,0.05)}
+.fcard img{width:100%;height:120px;object-fit:cover;border-radius:6px}
+.fcard .name{font-size:14px;margin-top:8px}
+
+/* product detail */
+.product{background:#fff;border-radius:12px;padding:12px;margin:12px 0;box-shadow:0 8px 20px rgba(10,10,10,0.06)}
+.product .top{display:flex;gap:12px}
+.product img{width:36%;border-radius:8px;object-fit:cover}
+.product .info{flex:1}
+.product h3{margin:0;font-size:18px}
+.pricebig{font-size:20px;font-weight:700;margin-top:8px}
+.addbtn{display:block;width:100%;padding:12px;border-radius:10px;background:var(--accent);color:#fff;text-align:center;margin-top:12px;font-weight:700}
+
+/* cart drawer */
+.cart-btn{position:fixed;right:14px;bottom:18px;background:var(--accent);color:#fff;padding:12px 14px;border-radius:999px;box-shadow:0 12px 30px rgba(0,0,0,0.15);z-index:40}
+.drawer{position:fixed;right:8px;top:70px;width:92%;max-width:380px;background:#fff;border-radius:12px;padding:12px;box-shadow:0 18px 40px rgba(0,0,0,0.12);display:none;z-index:60}
+.drawer.open{display:block}
+.drawer h4{margin:0 0 10px}
+.cart-item{display:flex;gap:10px;align-items:center;padding:8px 0;border-top:1px solid #eee}
+.cart-item img{width:52px;height:52px;object-fit:cover;border-radius:6px}
+.cart-footer{display:flex;justify-content:space-between;align-items:center;padding-top:12px}
+.checkout{background:var(--accent);color:#fff;padding:10px 12px;border-radius:8px;font-weight:700}
+
+/* login modal */
+.modal{position:fixed;left:0;top:0;width:100%;height:100%;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.4);z-index:80}
+.modal.open{display:flex}
+.modal .box{width:92%;max-width:420px;background:#fff;padding:18px;border-radius:12px}
+.input{width:100%;padding:12px;border-radius:10px;border:1px solid #e6e6e6;margin-top:10px}
+.signin{background:var(--accent);color:#fff;padding:12px;border-radius:10px;margin-top:12px;text-align:center;font-weight:700}
+
+/* utilities */
+.muted{color:var(--muted);font-size:13px}
+.center{text-align:center}
+
+/* responsive adjustments */
+@media (min-width:420px){
+  .wrap{margin:28px auto}
+  .hero .title{font-size:30px}
+  .card img{height:160px}
+}
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">NEXT WIN</div>
+      <div class="navicons">
+        <button class="icon" aria-label="search">🔍</button>
+        <button class="icon" id="openCart" aria-label="cart">🛒</button>
+        <button class="icon" id="openLogin" aria-label="account">👤</button>
+      </div>
+    </header><section class="hero">
+  <div>
+    <h1 class="title">WIN THE STYLE.<br>NEXT WIN.</h1>
+  </div>
+  <div class="center">
+    <button class="cta">SHOP NOW</button>
+  </div>
+</section>
+
+<div class="section-title">Categories</div>
+<div class="grid">
+  <div class="card"><img src="https://images.unsplash.com/photo-1539887549793-6a0b2a2f0c37?w=800&q=60" alt="men"><div class="label">MEN</div></div>
+  <div class="card"><img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=60" alt="women"><div class="label">WOMEN</div></div>
+  <div class="card"><img src="https://images.unsplash.com/photo-1520975911858-8d2e9b24ed9e?w=800&q=60" alt="new"><div class="label">NEW ARRIVALS</div></div>
+  <div class="card"><img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=800&q=60" alt="sale"><div class="label">SALE</div></div>
+</div>
+
+<div class="section-title">Featured Products</div>
+<div class="featured" aria-hidden="false">
+  <div class="fcard"><img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=800&q=60"><div class="name">Black Zip Hoodie</div><div class="muted">$79</div></div>
+  <div class="fcard"><img src="https://images.unsplash.com/photo-1495121605193-b116b5b09a4d?w=800&q=60"><div class="name">White T Shirt</div><div class="muted">$39</div></div>
+  <div class="fcard"><img src="https://images.unsplash.com/photo-1520975911858-8d2e9b24ed9e?w=800&q=60"><div class="name">Beige Trench Coat</div><div class="muted">$129</div></div>
+</div>
+
+<div class="product">
+  <div class="top">
+    <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=1000&q=80" alt="hoodie">
+    <div class="info">
+      <h3>Black Zip Hoodie</h3>
+      <div class="pricebig">$79</div>
+      <div class="muted">Size</div>
+      <div style="display:flex;gap:8px;margin-top:8px"><button class="input" style="flex:1">S</button><button class="input" style="flex:1">M</button><button class="input" style="flex:1">L</button></div>
+      <div class="muted" style="margin-top:8px">Color</div>
+      <div style="margin-top:8px"><button class="input">Black</button></div>
+      <button class="addbtn" id="addToCart">ADD TO CART</button>
+    </div>
+  </div>
+</div>
+
+<div class="section-title center">NEXT WIN IS NOT JUST CLOTHING, IT'S CONFIDENCE YOU WEAR.</div>
+
+  </div>  <!-- cart drawer --><button id="cartToggle" class="cart-btn">Cart</button>
+
+  <aside id="drawer" class="drawer" aria-hidden="true">
+    <h4>Cart</h4>
+    <div class="cart-item">
+      <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=800&q=60" alt="item">
+      <div>
+        <div style="font-weight:700">Black Zip Hoodie</div>
+        <div class="muted">Size: M • Color: Black</div>
+      </div>
+      <div style="margin-left:auto;font-weight:700">$79</div>
+    </div>
+    <div class="cart-footer">
+      <div class="muted">Subtotal</div>
+      <div style="font-weight:700">$79</div>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:8px">
+      <button class="checkout" style="flex:1">Checkout</button>
+      <button class="checkout" id="continue" style="flex:1;background:#eee;color:#111">Continue</button>
+    </div>
+  </aside>  <!-- login modal -->  <div id="loginModal" class="modal" aria-hidden="true">
+    <div class="box">
+      <h3>Login</h3>
+      <div class="muted">Mobile number</div>
+      <input class="input" placeholder="+91 Enter your mobile number" />
+      <button class="signin">Sign In</button>
+      <div style="text-align:center;margin-top:8px" class="muted">or</div>
+      <button class="input" style="margin-top:8px">Sign in with Google</button>
+    </div>
+  </div>  <script>
+    const drawer = document.getElementById('drawer');
+    const openCart = document.getElementById('openCart');
+    const cartToggle = document.getElementById('cartToggle');
+    const addToCart = document.getElementById('addToCart');
+    const loginModal = document.getElementById('loginModal');
+    const openLogin = document.getElementById('openLogin');
+
+    function toggleDrawer(show){
+      drawer.classList.toggle('open', show);
+      drawer.setAttribute('aria-hidden', !show);
+    }
+    function toggleLogin(show){
+      loginModal.classList.toggle('open', show);
+      loginModal.setAttribute('aria-hidden', !show);
+    }
+
+    openCart.addEventListener('click',()=>toggleDrawer(true));
+    cartToggle.addEventListener('click',()=>toggleDrawer(prev=>!drawer.classList.contains('open')));
+    document.getElementById('continue').addEventListener('click',()=>toggleDrawer(false));
+
+    addToCart.addEventListener('click',()=>toggleDrawer(true));
+
+    openLogin.addEventListener('click',()=>toggleLogin(true));
+    loginModal.addEventListener('click',(e)=>{ if(e.target===loginModal) toggleLogin(false)});
+
+    // small enhancement: close drawer when clicking outside
+    document.addEventListener('click',(e)=>{
+      if(!drawer.contains(e.target) && !e.target.matches('#openCart') && !e.target.closest('.cart-btn')){
+        drawer.classList.remove('open');
+        drawer.setAttribute('aria-hidden','true');
+      }
+    });
+  </script></body>
+</html>

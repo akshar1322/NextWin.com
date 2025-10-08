@@ -1,16 +1,27 @@
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import LenisProvider from "../components/providers/LenisProvider";
 import type { ReactNode } from "react";
+import { Poppins, Inter, Space_Mono } from "next/font/google";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+// Heading font
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['400', '600', '700'],
+  variable: '--font-poppins',
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+// Body font
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  variable: '--font-inter',
+});
+
+// Monospace font
+const spaceMono = Space_Mono({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  variable: '--font-mono',
 });
 
 export const metadata = {
@@ -18,13 +29,10 @@ export const metadata = {
   description: "A Next win",
 };
 
-// ✅ Explicitly type props
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${poppins.variable} ${inter.variable} ${spaceMono.variable} font-sans antialiased`}>
         <LenisProvider>{children}</LenisProvider>
       </body>
     </html>

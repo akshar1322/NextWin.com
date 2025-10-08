@@ -1,0 +1,273 @@
+// components/FontComponents.tsx
+import { ReactNode } from 'react';
+
+interface TextProps {
+  children: ReactNode;
+  className?: string;
+  as?: keyof JSX.IntrinsicElements;
+}
+
+// Base Poppins component
+export function PoppinsText({
+  children,
+  className = "",
+  as: Component = "span"
+}: TextProps & { as?: keyof JSX.IntrinsicElements }) {
+  return (
+    <Component
+      style={{ fontFamily: 'var(--font-poppins)' }}
+      className={className}
+    >
+      {children}
+    </Component>
+  );
+}
+
+// Specific weight components
+export function PoppinsThin({ children, className = "", as = "span" }: TextProps) {
+  return (
+    <PoppinsText as={as} className={`font-thin ${className}`}>
+      {children}
+    </PoppinsText>
+  );
+}
+
+export function PoppinsLight({ children, className = "", as = "span" }: TextProps) {
+  return (
+    <PoppinsText as={as} className={`font-light ${className}`}>
+      {children}
+    </PoppinsText>
+  );
+}
+
+export function PoppinsRegular({ children, className = "", as = "span" }: TextProps) {
+  return (
+    <PoppinsText as={as} className={`font-normal ${className}`}>
+      {children}
+    </PoppinsText>
+  );
+}
+
+export function PoppinsMedium({ children, className = "", as = "span" }: TextProps) {
+  return (
+    <PoppinsText as={as} className={`font-medium ${className}`}>
+      {children}
+    </PoppinsText>
+  );
+}
+
+export function PoppinsSemiBold({ children, className = "", as = "span" }: TextProps) {
+  return (
+    <PoppinsText as={as} className={`font-semibold ${className}`}>
+      {children}
+    </PoppinsText>
+  );
+}
+
+export function PoppinsBold({ children, className = "", as = "span" }: TextProps) {
+  return (
+    <PoppinsText as={as} className={`font-bold ${className}`}>
+      {children}
+    </PoppinsText>
+  );
+}
+
+export function PoppinsExtraBold({ children, className = "", as = "span" }: TextProps) {
+  return (
+    <PoppinsText as={as} className={`font-extrabold ${className}`}>
+      {children}
+    </PoppinsText>
+  );
+}
+
+export function PoppinsBlack({ children, className = "", as = "span" }: TextProps) {
+  return (
+    <PoppinsText as={as} className={`font-black ${className}`}>
+      {children}
+    </PoppinsText>
+  );
+}
+
+// Predefined heading components
+export function PoppinsH1({ children, className = "" }: Omit<TextProps, 'as'>) {
+  return (
+    <PoppinsBold as="h1" className={`text-4xl md:text-5xl lg:text-6xl ${className}`}>
+      {children}
+    </PoppinsBold>
+  );
+}
+
+export function PoppinsH2({ children, className = "" }: Omit<TextProps, 'as'>) {
+  return (
+    <PoppinsBold as="h2" className={`text-3xl md:text-4xl lg:text-5xl ${className}`}>
+      {children}
+    </PoppinsBold>
+  );
+}
+
+export function PoppinsH3({ children, className = "" }: Omit<TextProps, 'as'>) {
+  return (
+    <PoppinsSemiBold as="h3" className={`text-2xl md:text-3xl lg:text-4xl ${className}`}>
+      {children}
+    </PoppinsSemiBold>
+  );
+}
+
+export function PoppinsH4({ children, className = "" }: Omit<TextProps, 'as'>) {
+  return (
+    <PoppinsSemiBold as="h4" className={`text-xl md:text-2xl lg:text-3xl ${className}`}>
+      {children}
+    </PoppinsSemiBold>
+  );
+}
+
+export function PoppinsH5({ children, className = "" }: Omit<TextProps, 'as'>) {
+  return (
+    <PoppinsMedium as="h5" className={`text-lg md:text-xl lg:text-2xl ${className}`}>
+      {children}
+    </PoppinsMedium>
+  );
+}
+
+export function PoppinsH6({ children, className = "" }: Omit<TextProps, 'as'>) {
+  return (
+    <PoppinsMedium as="h6" className={`text-base md:text-lg lg:text-xl ${className}`}>
+      {children}
+    </PoppinsMedium>
+  );
+}
+
+// Paragraph components
+export function PoppinsLead({ children, className = "" }: Omit<TextProps, 'as'>) {
+  return (
+    <PoppinsRegular as="p" className={`text-lg md:text-xl ${className}`}>
+      {children}
+    </PoppinsRegular>
+  );
+}
+
+export function PoppinsParagraph({ children, className = "" }: Omit<TextProps, 'as'>) {
+  return (
+    <PoppinsRegular as="p" className={`text-base ${className}`}>
+      {children}
+    </PoppinsRegular>
+  );
+}
+
+export function PoppinsSmall({ children, className = "" }: Omit<TextProps, 'as'>) {
+  return (
+    <PoppinsLight as="p" className={`text-sm ${className}`}>
+      {children}
+    </PoppinsLight>
+  );
+}
+
+// Special components
+export function PoppinsLogo({ children, className = "" }: Omit<TextProps, 'as'>) {
+  return (
+    <PoppinsBlack as="span" className={`text-2xl tracking-tight ${className}`}>
+      {children}
+    </PoppinsBlack>
+  );
+}
+
+export function PoppinsButton({ children, className = "" }: Omit<TextProps, 'as'>) {
+  return (
+    <PoppinsSemiBold as="span" className={`text-base uppercase tracking-wide ${className}`}>
+      {children}
+    </PoppinsSemiBold>
+  );
+}
+
+// Export a default object for easy imports
+export const Poppins = {
+  Text: PoppinsText,
+  Thin: PoppinsThin,
+  Light: PoppinsLight,
+  Regular: PoppinsRegular,
+  Medium: PoppinsMedium,
+  SemiBold: PoppinsSemiBold,
+  Bold: PoppinsBold,
+  ExtraBold: PoppinsExtraBold,
+  Black: PoppinsBlack,
+  H1: PoppinsH1,
+  H2: PoppinsH2,
+  H3: PoppinsH3,
+  H4: PoppinsH4,
+  H5: PoppinsH5,
+  H6: PoppinsH6,
+  Lead: PoppinsLead,
+  Paragraph: PoppinsParagraph,
+  Small: PoppinsSmall,
+  Logo: PoppinsLogo,
+  Button: PoppinsButton,
+};
+
+
+
+// app/page.tsx
+import { Poppins } from '@/components/FontComponents';
+
+export default function Home() {
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center">
+      <Poppins.H1 className="text-center mb-8">
+        Splisxstudio
+      </Poppins.H1>
+
+      <Poppins.Lead className="text-center max-w-2xl mb-12">
+        Where limitless creativity meets digital innovation
+      </Poppins.Lead>
+
+      <Poppins.Button className="px-8 py-3 bg-blue-600 text-white rounded-lg">
+        Get Started
+      </Poppins.Button>
+    </div>
+  );
+}
+
+
+
+
+// app/about/page.tsx
+import { Poppins } from '@/components/FontComponents';
+
+export default function About() {
+  return (
+    <div className="container mx-auto px-4 py-16">
+      <Poppins.H2 className="mb-8">About Splisxstudio</Poppins.H2>
+
+      <Poppins.Lead className="mb-6">
+        We are a creative studio pushing the boundaries of digital design.
+      </Poppins.Lead>
+
+      <Poppins.Paragraph className="mb-4">
+        Founded with a vision to create limitless digital experiences,
+        Splisxstudio combines cutting-edge technology with artistic vision.
+      </Poppins.Paragraph>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+        <div>
+          <Poppins.H4 className="mb-4">Innovation</Poppins.H4>
+          <Poppins.Small>
+            We constantly explore new technologies and creative approaches.
+          </Poppins.Small>
+        </div>
+
+        <div>
+          <Poppins.H4 className="mb-4">Quality</Poppins.H4>
+          <Poppins.Small>
+            Every project receives our utmost attention to detail and craftsmanship.
+          </Poppins.Small>
+        </div>
+
+        <div>
+          <Poppins.H4 className="mb-4">Creativity</Poppins.H4>
+          <Poppins.Small>
+            Unlimited creative solutions tailored to your unique needs.
+          </Poppins.Small>
+        </div>
+      </div>
+    </div>
+  );
+}
