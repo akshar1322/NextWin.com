@@ -7,11 +7,11 @@ import InstagramSection from "@/components/Ui/ig";
 const Homepage = () => {
   return (
     <>
-      <main className="bg-[#EEEEEE] px-4 md:px-8 lg:px-12 overflow-hidden">
+      <main className="bg-[#EEEEEE] overflow-hidden">
         {/* Banner with top margin */}
-        <div className="mt-6 sm:mt-10 lg:mt-14">
+
           <HeroBanner />
-        </div>
+
 
         {/* Best Seller */}
         <section className="py-10 sm:py-14 lg:py-20">

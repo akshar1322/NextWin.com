@@ -122,11 +122,11 @@ export default function Footer() {
         {/* Logo */}
         <div className="flex items-center gap-4 mb-6 md:mb-0">
           <Image
-            src="/images/logo/main logo.jpg"
+            src="/images/logo/Asset-4.svg"
             alt="Next Win Logo"
-            width={100}
-            height={100}
-            className="object-contain"
+            width={400}
+            height={200}
+            className="object-contain invert brightness-0 filter"
           />
         </div>
 
@@ -140,7 +140,7 @@ export default function Footer() {
               target="_blank"
               className="underline hover:text-orange-500"
             >
-              SplitsX
+              SplitsX Studio
             </Link>
           </p>
           <p className="mt-2 text-sm uppercase opacity-60">{version}</p>

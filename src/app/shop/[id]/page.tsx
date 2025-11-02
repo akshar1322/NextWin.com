@@ -1,11 +1,11 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { products } from "@/data/products";
-import Navbar from "@/components/Ui/Navbar";
+import Navbar from "@/components/Ui/Navbar/Navbar";
 import Footer from "@/components/Ui/Footer";
 
 import { FaAmazon, FaShoppingBag } from "react-icons/fa";
@@ -13,6 +13,8 @@ import { SiFlipkart } from "react-icons/si";
 
 export default function ProductDetailsPage() {
   const { id } = useParams();
+  const router = useRouter(); // ✅ Added router hook
+
   const product = products.find((p) => p.id.toString() === id);
   const [mainImage, setMainImage] = useState(product?.images[0]);
   const [openSection, setOpenSection] = useState<string | null>(null);
@@ -73,8 +75,25 @@ export default function ProductDetailsPage() {
               {product.description}
             </p>
 
+            {/* Add to Cart & Buy Now Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 mt-8">
+              <button
+                onClick={() => alert(`${product.name} added to cart!`)}
+                className="flex-1 bg-black text-white text-base sm:text-lg font-semibold py-3 rounded-xl hover:bg-gray-800 transition"
+              >
+                Add to Cart
+              </button>
+
+              <button
+                onClick={() => router.push(`/checkout?product=${product.id}`)} // ✅ Fixed Buy Now action
+                className="flex-1 bg-[#FF9900] text-black text-base sm:text-lg font-semibold py-3 rounded-xl hover:bg-[#e68a00] transition"
+              >
+                Buy Now
+              </button>
+            </div>
+
             {/* Affiliate Links */}
-            <div className="flex gap-4 mt-6">
+            <div className="flex gap-4 mt-6 flex-wrap">
               {product.affiliates.amazon && (
                 <Link
                   href={product.affiliates.amazon}
@@ -121,7 +140,10 @@ export default function ProductDetailsPage() {
                 "Orders are processed within 2–3 business days. Standard shipping takes 5–7 days depending on your location.",
             },
           ].map((section) => (
-            <div key={section.title} className="border-b border-gray-200 pb-4 sm:pb-6">
+            <div
+              key={section.title}
+              className="border-b border-gray-200 pb-4 sm:pb-6"
+            >
               <button
                 onClick={() =>
                   setOpenSection(

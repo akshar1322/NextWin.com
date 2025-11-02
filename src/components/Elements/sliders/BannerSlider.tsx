@@ -9,19 +9,17 @@ import "swiper/css/effect-fade";
 const slides = [
   {
     id: 1,
-    image: "/images/banners/hjkdhjkah.jpg",
+    image: "/images/banners/5202247.jpg",
     link: "https://your-link-1.com",
   },
   {
     id: 2,
-    image:
-      "https://images.unsplash.com/photo-1521334884684-d80222895322?auto=format&fit=crop&w=1920&q=80",
+    image: "/images/banners/6766025.jpg",
     link: "https://your-link-2.com",
   },
   {
     id: 3,
-    image:
-      "https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&w=1920&q=80",
+    image: "/images/banners/8925411.jpg",
     link: "https://your-link-3.com",
   },
 ];

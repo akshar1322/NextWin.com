@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import countries from "@/lib/countries";
-import Navbar from "@/components/Ui/Navbar";
+import Navbar from "@/components/Ui/Navbar/Navbar";
 import Footer from "@/components/Ui/Footer";
 
 
@@ -24,7 +24,7 @@ export default function ContactPage() {
 
   return (
     <>
-      <main className="bg-[#EEEEEE] text-black">
+      <main className="bg-[#EEEEEE]  text-black">
         {/* ✅ Navbar */}
         <header>
           <Navbar />

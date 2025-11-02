@@ -1,9 +1,9 @@
 # 🌐 Project – nextwin
 
-![SplitsX Logo]data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTA5IiBoZWlnaHQ9IjEyMTIiIHZpZXdCb3g9IjAgMCA5MDkgMTIxMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iOTA5IiBoZWlnaHQ9IjEyMTIiIGZpbGw9IiMwMDAiLz48dGV4dCB4PSIxNTAiIHk9IjYwMCIgZm9udC1zaXplPSIxNDBweCIgZmlsbD0id2hpdGUiPlNQTElUWDwvdGV4dD48L3N2Zz4=`;
+![SplitsX Studio Logo]data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTA5IiBoZWlnaHQ9IjEyMTIiIHZpZXdCb3g9IjAgMCA5MDkgMTIxMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iOTA5IiBoZWlnaHQ9IjEyMTIiIGZpbGw9IiMwMDAiLz48dGV4dCB4PSIxNTAiIHk9IjYwMCIgZm9udC1zaXplPSIxNDBweCIgZmlsbD0id2hpdGUiPlNQTElUWDwvdGV4dD48L3N2Zz4=`;
 
 
-This project was developed by **SplitsX** for **nextwin**.
+This project was developed by **SplitsX Studio** for **nextwin**.
 It is a modern, scalable, and responsive **website / web application** built with the latest technologies.
 
 ---
@@ -51,7 +51,7 @@ npm run dev
 ---
 
 ## 👨‍💻 Developer Info
-- **Company:** SplitsX
+- **Company:** SplitsX Studio
 - **Email:** aksharpatel528@gmail.com
 - **WhatsApp:** +91-6353191174
 - **Website:**https://splisxstudio.wixstudio.com/splisxstudio

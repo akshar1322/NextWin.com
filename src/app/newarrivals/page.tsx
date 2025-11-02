@@ -1,6 +1,6 @@
 import ProductCard from "@/components/cards/ProductCard";
 import { products } from "@/data/products";
-import Navbar from "../../components/Ui/Navbar";
+import Navbar from "../../components/Ui/Navbar/Navbar";
 import Footer from "../../components/Ui/Footer";
 import BannerSlider from "@/components/Elements/sliders/propBannerSlider";
 import { Metadata } from "next";
