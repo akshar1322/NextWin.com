@@ -4,15 +4,17 @@ export interface ICategory extends Document {
   name: string;
   description?: string;
   status: "active" | "inactive";
-  productCount?: number;
+  image?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const categorySchema = new Schema<ICategory>(
   {
-    name: { type: String, required: true, unique: true, trim: true, index: true },
+    name: { type: String, required: true, unique: true, trim: true },
     description: { type: String },
+    image: { type: String },
     status: { type: String, enum: ["active", "inactive"], default: "active" },
-    productCount: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

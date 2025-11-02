@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Sidebar from "@/components/Ui/admin/UI/Sidemenu";
+import { useToast } from "@/components/Ui/use-toast";
 
 interface Product {
   id: string;
@@ -18,6 +19,12 @@ interface Product {
   reviews: number;
   createdAt: string;
   tags: string[];
+  sku?: string;
+  affiliates?: {
+    amazon?: string;
+    flipkart?: string;
+    myntra?: string;
+  };
 }
 
 export default function ProductsPage() {
@@ -29,6 +36,11 @@ export default function ProductsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
+  const [bulkActions, setBulkActions] = useState<string[]>([]);
+  const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
+
+  const { toast } = useToast();
+
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -37,54 +49,69 @@ export default function ProductsPage() {
     brand: "",
     stock: 0,
     status: "active" as "active" | "inactive" | "draft",
-    tags: ""
+    tags: "",
+    sku: "",
+    affiliates: {
+      amazon: "",
+      flipkart: "",
+      myntra: ""
+    }
   });
 
   // ✅ Fetch products from API
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await fetch("/api/products");
-        const data = await res.json();
-
-        const productsArray = Array.isArray(data) ? data : data.products;
-
-        if (productsArray) {
-          setProducts(
-            productsArray.map((p: any) => ({
-              id: p._id,
-              name: p.name,
-              description: p.description || "",
-              price: p.price || 0,
-              category: p.category?.name || "Uncategorized",
-              brand: p.brand || "Unknown",
-              stock: p.stock || 0,
-              status: p.status || "active",
-              images: p.images?.length ? p.images : ["/api/placeholder/400/400"],
-              rating: p.rating || 0,
-              reviews: p.reviews || 0,
-              createdAt: new Date(p.createdAt).toISOString().split("T")[0],
-              tags: p.tags || []
-            }))
-          );
-        }
-
-      } catch (err) {
-        console.error("Error fetching products:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchProducts();
   }, []);
+
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch("/api/products");
+      const data = await res.json();
+
+      const productsArray = Array.isArray(data) ? data : data.products;
+
+      if (productsArray) {
+        setProducts(
+          productsArray.map((p: any) => ({
+            id: p._id,
+            name: p.name,
+            description: p.description || "",
+            price: p.price || 0,
+            category: p.category || "Uncategorized",
+            brand: p.brand || "Unknown",
+            stock: p.stock || 0,
+            status: p.status || "active",
+            images: p.images?.length ? p.images : ["/api/placeholder/400/400"],
+            rating: p.rating || 0,
+            reviews: p.reviews || 0,
+            createdAt: new Date(p.createdAt).toISOString().split("T")[0],
+            tags: p.tags || [],
+            sku: p.sku || "",
+            affiliates: p.affiliates || {}
+          }))
+        );
+      }
+
+    } catch (err) {
+      console.error("Error fetching products:", err);
+      toast({
+        title: "Error",
+        description: "Failed to fetch products",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // 🔍 Filter products
   const filteredProducts = products.filter(product => {
     const matchesSearch =
       product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       product.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.category.toLowerCase().includes(searchTerm.toLowerCase());
+      product.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.sku?.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesStatus = statusFilter === "all" || product.status === statusFilter;
     const matchesCategory = categoryFilter === "all" || product.category === categoryFilter;
@@ -94,10 +121,22 @@ export default function ProductsPage() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: name === "price" || name === "stock" ? parseFloat(value) || 0 : value
-    }));
+
+    if (name.startsWith("affiliates.")) {
+      const affiliateField = name.split(".")[1];
+      setFormData(prev => ({
+        ...prev,
+        affiliates: {
+          ...prev.affiliates,
+          [affiliateField]: value
+        }
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: name === "price" || name === "stock" || name === "reviews" ? parseFloat(value) || 0 : value
+      }));
+    }
   };
 
   // ✅ Update product via API
@@ -110,23 +149,45 @@ export default function ProductsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
-          tags: formData.tags.split(",").map(t => t.trim())
+          tags: formData.tags.split(",").map(t => t.trim()).filter(t => t),
+          rating: parseFloat(formData.rating as any) || 0,
+          reviews: parseInt(formData.reviews as any) || 0
         })
       });
 
       const data = await res.json();
       if (data.success) {
         setProducts(prev =>
-          prev.map(p => (
+          prev.map(p =>
             p.id === editingProduct?.id
-              ? { ...p, ...formData, tags: formData.tags.split(",").map(t => t.trim()) }
+              ? {
+                  ...p,
+                  ...formData,
+                  tags: formData.tags.split(",").map(t => t.trim()).filter(t => t),
+                  rating: parseFloat(formData.rating as any) || 0,
+                  reviews: parseInt(formData.reviews as any) || 0
+                }
               : p
-          ))
+          )
         );
+
+        toast({
+          title: "Success!",
+          description: "Product updated successfully",
+          variant: "success"
+        });
+
         resetForm();
+      } else {
+        throw new Error(data.error);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error updating product:", err);
+      toast({
+        title: "Error",
+        description: err.message || "Failed to update product",
+        variant: "destructive"
+      });
     }
   };
 
@@ -139,7 +200,13 @@ export default function ProductsPage() {
       brand: "",
       stock: 0,
       status: "active",
-      tags: ""
+      tags: "",
+      sku: "",
+      affiliates: {
+        amazon: "",
+        flipkart: "",
+        myntra: ""
+      }
     });
     setEditingProduct(null);
     setShowEditForm(false);
@@ -154,7 +221,13 @@ export default function ProductsPage() {
       brand: product.brand,
       stock: product.stock,
       status: product.status,
-      tags: product.tags.join(", ")
+      tags: product.tags.join(", "),
+      sku: product.sku || "",
+      affiliates: {
+        amazon: product.affiliates?.amazon || "",
+        flipkart: product.affiliates?.flipkart || "",
+        myntra: product.affiliates?.myntra || ""
+      }
     });
     setEditingProduct(product);
     setShowEditForm(true);
@@ -169,10 +242,100 @@ export default function ProductsPage() {
       if (data.success) {
         setProducts(prev => prev.filter(p => p.id !== productId));
         setDeleteConfirm(null);
+
+        toast({
+          title: "Success!",
+          description: "Product deleted successfully",
+          variant: "success"
+        });
+      } else {
+        throw new Error(data.error);
+      }
+    } catch (err: any) {
+      console.error("Error deleting product:", err);
+      toast({
+        title: "Error",
+        description: err.message || "Failed to delete product",
+        variant: "destructive"
+      });
+    }
+  };
+
+  // ✅ Bulk actions
+  const handleBulkAction = async (action: string) => {
+    if (selectedProducts.length === 0) {
+      toast({
+        title: "Warning",
+        description: "Please select products to perform this action",
+        variant: "warning"
+      });
+      return;
+    }
+
+    try {
+      if (action === "delete") {
+        if (!confirm(`Are you sure you want to delete ${selectedProducts.length} products?`)) return;
+
+        const deletePromises = selectedProducts.map(id =>
+          fetch(`/api/products/${id}`, { method: "DELETE" })
+        );
+
+        await Promise.all(deletePromises);
+        setProducts(prev => prev.filter(p => !selectedProducts.includes(p.id)));
+        setSelectedProducts([]);
+
+        toast({
+          title: "Success!",
+          description: `${selectedProducts.length} products deleted successfully`,
+          variant: "success"
+        });
+      } else if (action === "activate") {
+        await Promise.all(
+          selectedProducts.map(id =>
+            fetch(`/api/products/${id}`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ status: "active" })
+            })
+          )
+        );
+
+        setProducts(prev =>
+          prev.map(p =>
+            selectedProducts.includes(p.id) ? { ...p, status: "active" } : p
+          )
+        );
+
+        toast({
+          title: "Success!",
+          description: `${selectedProducts.length} products activated`,
+          variant: "success"
+        });
       }
     } catch (err) {
-      console.error("Error deleting product:", err);
+      console.error("Error performing bulk action:", err);
+      toast({
+        title: "Error",
+        description: "Failed to perform bulk action",
+        variant: "destructive"
+      });
     }
+  };
+
+  const toggleProductSelection = (productId: string) => {
+    setSelectedProducts(prev =>
+      prev.includes(productId)
+        ? prev.filter(id => id !== productId)
+        : [...prev, productId]
+    );
+  };
+
+  const selectAllProducts = () => {
+    setSelectedProducts(
+      selectedProducts.length === filteredProducts.length
+        ? []
+        : filteredProducts.map(p => p.id)
+    );
   };
 
   // UI Helper Functions
@@ -205,6 +368,9 @@ export default function ProductsPage() {
   const activeProducts = products.filter(p => p.status === "active").length;
   const outOfStockProducts = products.filter(p => p.stock === 0).length;
   const totalRevenue = products.reduce((sum, p) => sum + p.price * p.stock, 0);
+  const averageRating = products.length > 0
+    ? products.reduce((sum, p) => sum + p.rating, 0) / products.length
+    : 0;
 
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800">
@@ -214,7 +380,7 @@ export default function ProductsPage() {
       </div>
 
       {/* Main Content - Adjusted for sidebar */}
-      <div className="flex-1 ml-64 py-4 px-4 lg:px-8"> {/* Added ml-64 for sidebar width */}
+      <div className="flex-1 ml-64 py-4 px-4 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="mb-8">
@@ -233,9 +399,12 @@ export default function ProductsPage() {
                   <i className="ri-add-line mr-2"></i>
                   Add New Product
                 </Link>
-                <button className="px-6 py-3 border border-gray-600 text-gray-300 rounded-xl hover:bg-gray-700/50 transition-all duration-300 flex items-center">
-                  <i className="ri-download-line mr-2"></i>
-                  Export
+                <button
+                  onClick={fetchProducts}
+                  className="px-6 py-3 border border-gray-600 text-gray-300 rounded-xl hover:bg-gray-700/50 transition-all duration-300 flex items-center"
+                >
+                  <i className="ri-refresh-line mr-2"></i>
+                  Refresh
                 </button>
               </div>
             </div>
@@ -282,15 +451,44 @@ export default function ProductsPage() {
             <div className="bg-gray-800/70 backdrop-blur-xl border border-gray-700/50 rounded-2xl p-6 shadow-2xl shadow-purple-500/10">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-400 text-sm">Inventory Value</p>
-                  <p className="text-3xl font-bold text-white mt-2">${totalRevenue.toLocaleString()}</p>
+                  <p className="text-gray-400 text-sm">Avg Rating</p>
+                  <p className="text-3xl font-bold text-white mt-2">{averageRating.toFixed(1)}</p>
                 </div>
                 <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center">
-                  <i className="ri-money-dollar-circle-line text-purple-400 text-xl"></i>
+                  <i className="ri-star-line text-purple-400 text-xl"></i>
                 </div>
               </div>
             </div>
           </div>
+
+          {/* Bulk Actions */}
+          {selectedProducts.length > 0 && (
+            <div className="bg-gray-800/70 backdrop-blur-xl border border-gray-700/50 rounded-2xl p-4 mb-6 shadow-2xl shadow-yellow-500/10">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <span className="text-white font-medium">
+                    {selectedProducts.length} product(s) selected
+                  </span>
+                  <select
+                    value={bulkActions[0] || ""}
+                    onChange={(e) => handleBulkAction(e.target.value)}
+                    className="px-4 py-2 bg-gray-900/80 border border-gray-600/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
+                  >
+                    <option value="">Bulk Actions</option>
+                    <option value="activate">Activate</option>
+                    <option value="deactivate">Deactivate</option>
+                    <option value="delete">Delete</option>
+                  </select>
+                </div>
+                <button
+                  onClick={() => setSelectedProducts([])}
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  <i className="ri-close-line text-xl"></i>
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Products Table */}
           <div className="bg-gray-800/70 backdrop-blur-xl border border-gray-700/50 rounded-2xl p-6 shadow-2xl shadow-purple-500/10">
@@ -330,12 +528,9 @@ export default function ProductsPage() {
                   className="px-4 py-2 bg-gray-900/80 backdrop-blur-sm border border-gray-600/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-400 transition-all duration-300"
                 >
                   <option value="all">All Categories</option>
-                  <option value="Electronics">Electronics</option>
-                  <option value="Fashion">Fashion</option>
-                  <option value="Home & Kitchen">Home & Kitchen</option>
-                  <option value="Sports">Sports</option>
-                  <option value="Books">Books</option>
-                  <option value="Beauty">Beauty</option>
+                  {Array.from(new Set(products.map(p => p.category))).map(category => (
+                    <option key={category} value={category}>{category}</option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -357,9 +552,17 @@ export default function ProductsPage() {
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-gray-700/50">
+                      <th className="text-left py-4 px-4 text-gray-400 font-semibold">
+                        <input
+                          type="checkbox"
+                          checked={selectedProducts.length === filteredProducts.length && filteredProducts.length > 0}
+                          onChange={selectAllProducts}
+                          className="rounded border-gray-600 bg-gray-700/50"
+                        />
+                      </th>
                       <th className="text-left py-4 px-4 text-gray-400 font-semibold">Product</th>
+                      <th className="text-left py-4 px-4 text-gray-400 font-semibold">SKU</th>
                       <th className="text-left py-4 px-4 text-gray-400 font-semibold">Category</th>
-                      <th className="text-left py-4 px-4 text-gray-400 font-semibold">Brand</th>
                       <th className="text-left py-4 px-4 text-gray-400 font-semibold">Price</th>
                       <th className="text-left py-4 px-4 text-gray-400 font-semibold">Stock</th>
                       <th className="text-left py-4 px-4 text-gray-400 font-semibold">Rating</th>
@@ -370,6 +573,14 @@ export default function ProductsPage() {
                   <tbody>
                     {filteredProducts.map((product) => (
                       <tr key={product.id} className="border-b border-gray-700/30 hover:bg-gray-700/20 transition-colors">
+                        <td className="py-4 px-4">
+                          <input
+                            type="checkbox"
+                            checked={selectedProducts.includes(product.id)}
+                            onChange={() => toggleProductSelection(product.id)}
+                            className="rounded border-gray-600 bg-gray-700/50"
+                          />
+                        </td>
                         <td className="py-4 px-4">
                           <div className="flex items-center">
                             <img
@@ -384,10 +595,10 @@ export default function ProductsPage() {
                           </div>
                         </td>
                         <td className="py-4 px-4">
-                          <span className="text-gray-400 text-sm">{product.category}</span>
+                          <span className="text-gray-400 text-sm font-mono">{product.sku || "N/A"}</span>
                         </td>
                         <td className="py-4 px-4">
-                          <span className="text-gray-400 text-sm">{product.brand}</span>
+                          <span className="text-gray-400 text-sm">{product.category}</span>
                         </td>
                         <td className="py-4 px-4">
                           <span className="text-white font-medium">${product.price}</span>
@@ -426,12 +637,13 @@ export default function ProductsPage() {
                             >
                               <i className="ri-delete-bin-line"></i>
                             </button>
-                            <button
+                            <Link
+                              href={`/admin/products/${product.id}`}
                               className="p-2 bg-green-500/20 text-green-400 rounded-lg hover:bg-green-500/30 transition-colors duration-300"
                               title="View Details"
                             >
                               <i className="ri-eye-line"></i>
-                            </button>
+                            </Link>
                           </div>
                         </td>
                       </tr>
@@ -447,7 +659,7 @@ export default function ProductsPage() {
       {/* Edit Product Modal */}
       {showEditForm && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-lg z-50 flex items-center justify-center p-4">
-          <div className="bg-gray-800/90 backdrop-blur-xl border border-gray-700/50 rounded-2xl p-8 shadow-2xl shadow-purple-500/20 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+          <div className="bg-gray-800/90 backdrop-blur-xl border border-gray-700/50 rounded-2xl p-8 shadow-2xl shadow-purple-500/20 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-2xl font-bold text-white">
                 Edit Product
@@ -508,6 +720,20 @@ export default function ProductsPage() {
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-300 mb-3">
+                    SKU
+                  </label>
+                  <input
+                    type="text"
+                    name="sku"
+                    value={formData.sku}
+                    onChange={handleInputChange}
+                    placeholder="Enter SKU"
+                    className="w-full bg-gray-900/80 backdrop-blur-sm border border-gray-600/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-400 transition-all duration-300 placeholder-gray-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-300 mb-3">
                     Price *
                   </label>
                   <input
@@ -535,6 +761,38 @@ export default function ProductsPage() {
                     placeholder="0"
                     min="0"
                     required
+                    className="w-full bg-gray-900/80 backdrop-blur-sm border border-gray-600/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-400 transition-all duration-300"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-300 mb-3">
+                    Rating
+                  </label>
+                  <input
+                    type="number"
+                    name="rating"
+                    value={formData.rating}
+                    onChange={handleInputChange}
+                    placeholder="0.0"
+                    step="0.1"
+                    min="0"
+                    max="5"
+                    className="w-full bg-gray-900/80 backdrop-blur-sm border border-gray-600/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-400 transition-all duration-300"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-300 mb-3">
+                    Reviews Count
+                  </label>
+                  <input
+                    type="number"
+                    name="reviews"
+                    value={formData.reviews}
+                    onChange={handleInputChange}
+                    placeholder="0"
+                    min="0"
                     className="w-full bg-gray-900/80 backdrop-blur-sm border border-gray-600/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-400 transition-all duration-300"
                   />
                 </div>
@@ -583,6 +841,48 @@ export default function ProductsPage() {
                   placeholder="e.g., wireless, premium, new-arrival"
                   className="w-full bg-gray-900/80 backdrop-blur-sm border border-gray-600/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-400 transition-all duration-300 placeholder-gray-500"
                 />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-300 mb-3">
+                    Amazon Affiliate URL
+                  </label>
+                  <input
+                    type="url"
+                    name="affiliates.amazon"
+                    value={formData.affiliates.amazon}
+                    onChange={handleInputChange}
+                    placeholder="https://amazon.com/product-link"
+                    className="w-full bg-gray-900/80 backdrop-blur-sm border border-gray-600/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-400 transition-all duration-300 placeholder-gray-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-300 mb-3">
+                    Flipkart Affiliate URL
+                  </label>
+                  <input
+                    type="url"
+                    name="affiliates.flipkart"
+                    value={formData.affiliates.flipkart}
+                    onChange={handleInputChange}
+                    placeholder="https://flipkart.com/product-link"
+                    className="w-full bg-gray-900/80 backdrop-blur-sm border border-gray-600/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-400 transition-all duration-300 placeholder-gray-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-300 mb-3">
+                    Myntra Affiliate URL
+                  </label>
+                  <input
+                    type="url"
+                    name="affiliates.myntra"
+                    value={formData.affiliates.myntra}
+                    onChange={handleInputChange}
+                    placeholder="https://myntra.com/product-link"
+                    className="w-full bg-gray-900/80 backdrop-blur-sm border border-gray-600/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-400 transition-all duration-300 placeholder-gray-500"
+                  />
+                </div>
               </div>
 
               <div className="flex space-x-4 pt-4">

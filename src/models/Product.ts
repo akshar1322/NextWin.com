@@ -1,14 +1,14 @@
+// models/Product.ts
 import mongoose, { Schema, Document, model, models } from "mongoose";
 
 export interface IProduct extends Document {
   name: string;
   description: string;
   price: number;
-  category: mongoose.Types.ObjectId;
+  category: string; // changed to string
   brand?: string;
   stock: number;
   sku?: string;
-  inventoryId?: mongoose.Types.ObjectId;
   tags?: string[];
   tag?: string;
   images: string[];
@@ -30,23 +30,13 @@ const productSchema = new Schema<IProduct>(
     name: { type: String, required: true, index: true },
     description: { type: String, required: true },
     price: { type: Number, required: true, index: true },
-    category: {
-      type: Schema.Types.ObjectId,
-      ref: "Category",
-      required: true,
-      index: true,
-    },
+    category: { type: String, required: true, index: true }, // string instead of ObjectId
     brand: { type: String, index: true },
     stock: { type: Number, default: 0 },
     sku: {
       type: String,
       unique: true,
       sparse: true,
-      index: true,
-    },
-    inventoryId: {
-      type: Schema.Types.ObjectId,
-      ref: "Inventory",
       index: true,
     },
     tags: [{ type: String, index: true }],
@@ -71,10 +61,16 @@ const productSchema = new Schema<IProduct>(
   { timestamps: true }
 );
 
-// 🔍 Compound indexes
+// 🔍 Indexes
 productSchema.index({ name: "text", description: "text", tags: "text" });
 productSchema.index({ category: 1, price: 1 });
 productSchema.index({ stock: 1 });
 
-const Product = models.Product || model<IProduct>("Product", productSchema);
+// ✅ Force delete old cached model to avoid schema mismatch errors
+if (mongoose.models.Product) {
+  delete mongoose.models.Product;
+}
+
+const Product = model<IProduct>("Product", productSchema);
 export default Product;
+

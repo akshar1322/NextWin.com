@@ -13,7 +13,7 @@ export const metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={poppins.variable}>
-      <body className="antialiased">
+      <body className="antialiased" suppressHydrationWarning={true}>
         <Providers>
           <LenisProvider>{children}</LenisProvider>
         </Providers>
