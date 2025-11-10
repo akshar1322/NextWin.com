@@ -12,19 +12,30 @@ gsap.registerPlugin(ScrollTrigger);
 
 const instagramImages = [
   // Row 1 (will move right to left)
-  "/images/insta1.jpg",
-  "/images/insta2.jpg",
-  "/images/insta3.jpg",
-  "/images/insta4.jpg",
-  "/images/insta5.jpg",
-  "/images/insta6.jpg",
+  "/images/ig/instagram-post-1.png",
+  "/images/ig/instagram-post-2.png",
+  "/images/ig/instagram-post-3.png",
+  "/images/ig/instagram-post-4.png",
+  "/images/ig/instagram-post-5.png",
+  "/images/ig/instagram-post-6.jpg",
+  "/images/ig/instagram-post-18.png",
+  "/images/ig/instagram-post-19.png",
+  "/images/ig/instagram-post-20.png",
+  "/images/ig/instagram-post-21.png",
   // Row 2 (will move left to right)
-  "/images/insta7.jpg",
-  "/images/insta8.jpg",
-  "/images/insta9.jpg",
-  "/images/insta10.jpg",
-  "/images/insta11.jpg",
-  "/images/insta12.jpg",
+  "/images/ig/instagram-post-7.png",
+  "/images/ig/instagram-post-8.png",
+  "/images/ig/instagram-post-9.png",
+  "/images/ig/instagram-post-10.png",
+  "/images/ig/instagram-post-11.png",
+  "/images/ig/instagram-post-12.png",
+  "/images/ig/instagram-post-13.png",
+  "/images/ig/instagram-post-14.png",
+  "/images/ig/instagram-post-15.png",
+  "/images/ig/instagram-post-16.png",
+  "/images/ig/instagram-post-17.png",
+
+
 ];
 
 export default function InstagramSection() {
@@ -39,7 +50,7 @@ export default function InstagramSection() {
     const ctx = gsap.context(() => {
       // Row 1: Move from right to left
       gsap.to(row1Ref.current, {
-        x: -200, // Adjust this value for speed
+        x: -50, // Adjust this value for speed
         ease: "none",
         scrollTrigger: {
           trigger: container,
@@ -51,7 +62,7 @@ export default function InstagramSection() {
 
       // Row 2: Move from left to right
       gsap.to(row2Ref.current, {
-        x: 200, // Adjust this value for speed
+        x: 50, // Adjust this value for speed
         ease: "none",
         scrollTrigger: {
           trigger: container,

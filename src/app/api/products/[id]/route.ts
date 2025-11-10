@@ -5,18 +5,20 @@ import cloudinary from "@/lib/cloudinary";
 
 export const runtime = "nodejs";
 
-/**
- * 🗑️ DELETE /api/products/[id]
- * Delete a product by ID
- */
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(
+  req: Request,
+  context: { params: { id: string } }
+) {
   try {
     await connectDB();
-    const { id } = params;
+    const { id } = context.params; // ✅ Access params safely
 
     const product = await Product.findById(id);
     if (!product) {
-      return NextResponse.json({ success: false, error: "Product not found" }, { status: 404 });
+      return NextResponse.json(
+        { success: false, error: "Product not found" },
+        { status: 404 }
+      );
     }
 
     // 🧹 Optionally delete images from Cloudinary
@@ -34,12 +36,19 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
     }
 
     await Product.findByIdAndDelete(id);
-    return NextResponse.json({ success: true, message: "Product deleted successfully" }, { status: 200 });
+    return NextResponse.json(
+      { success: true, message: "Product deleted successfully" },
+      { status: 200 }
+    );
   } catch (err: any) {
     console.error("Error deleting product:", err);
-    return NextResponse.json({ success: false, error: "Failed to delete product" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Failed to delete product" },
+      { status: 500 }
+    );
   }
 }
+
 
 /**
  * ✏️ PUT /api/products/[id]
