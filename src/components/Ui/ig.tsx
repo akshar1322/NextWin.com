@@ -102,7 +102,7 @@ export default function InstagramSection() {
       <div className="flex flex-col gap-6">
         {/* First Row of Images (Right to Left) */}
         <div ref={row1Ref} className="flex gap-6 pl-6">
-          {instagramImages.slice(0, 6).map((imgSrc, index) => (
+          {instagramImages.slice(0, 10).map((imgSrc, index) => (
             <Link
               href="https://instagram.com"
               target="_blank"
@@ -127,7 +127,7 @@ export default function InstagramSection() {
 
         {/* Second Row of Images (Left to Right) */}
         <div ref={row2Ref} className="flex gap-6 pr-6">
-          {instagramImages.slice(6, 12).map((imgSrc, index) => (
+          {instagramImages.slice(10, 21).map((imgSrc, index) => (
             <Link
               href="https://instagram.com"
               target="_blank"
@@ -136,7 +136,7 @@ export default function InstagramSection() {
             >
               <Image
                 src={imgSrc}
-                alt={`Instagram image ${index + 7}`}
+                alt={`Instagram image ${index + 11}`}
                 width={300}
                 height={300}
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
