@@ -9,18 +9,49 @@ const menSlides = [
   { id: 2, image: "/images/banners/emma-swoboda-qKaioqt8mo4-unsplash.jpg", link: "#" },
 ];
 
+const getBaseUrl = () => {
+  const explicitEnvUrl =
+    process.env.NEXT_PUBLIC_BASE_URL ||
+    process.env.NEXTAUTH_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "");
+
+  if (explicitEnvUrl) {
+    return explicitEnvUrl;
+  }
+
+  return "http://localhost:3000";
+};
+
 export default async function ShopPage({ searchParams }: { searchParams: { category?: string; search?: string } }) {
   const category = searchParams.category || "";
   const search = searchParams.search || "";
 
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/client/products?${category ? `category=${category}&` : ""}${search ? `search=${search}` : ""}`,
-    { cache: "no-store" }
-  );
+  const query = new URLSearchParams();
+  if (category) query.set("category", category);
+  if (search) query.set("search", search);
 
-  const data = await res.json();
+  const requestUrl = new URL("/api/client/products", getBaseUrl());
+  if (query.toString()) {
+    requestUrl.search = query.toString();
+  }
 
-  if (!data.success) {
+  let data: { success: boolean; products: Product[] } | null = null;
+
+  try {
+    const res = await fetch(requestUrl.toString(), { cache: "no-store" });
+
+    if (!res.ok) {
+      console.error("Failed to fetch products:", res.status, res.statusText);
+      return <p className="text-center text-red-500">Failed to load products</p>;
+    }
+
+    data = await res.json();
+  } catch (error) {
+    console.error("Unexpected error while fetching products:", error);
+    return <p className="text-center text-red-500">Failed to load products</p>;
+  }
+
+  if (!data?.success) {
     return <p className="text-center text-red-500">Failed to load products</p>;
   }
 
