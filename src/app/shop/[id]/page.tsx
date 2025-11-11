@@ -9,6 +9,7 @@ import Footer from "@/components/Ui/Footer";
 import { FaAmazon, FaShoppingBag } from "react-icons/fa";
 import { SiFlipkart } from "react-icons/si";
 import { Product } from "@/types/product";
+import Loader from "@/components/Ui/Loader";
 
 export default function ProductDetailsPage() {
   const { id } = useParams();
@@ -45,8 +46,9 @@ export default function ProductDetailsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-gray-600">
-        Loading product...
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader message="Fetching" words={["orders", "customers", "reports"]} />
+
       </div>
     );
   }

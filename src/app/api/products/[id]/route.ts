@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import Product from "@/models/Product";
 import connectDB from "@/lib/dbConnect";
 import cloudinary from "@/lib/cloudinary";
@@ -6,12 +6,12 @@ import cloudinary from "@/lib/cloudinary";
 export const runtime = "nodejs";
 
 export async function DELETE(
-  req: Request,
-  context: { params: { id: string } }
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
-    const { id } = context.params; // ✅ Access params safely
+    const { id } = await context.params; // ✅ Access params safely
 
     const product = await Product.findById(id);
     if (!product) {
@@ -54,10 +54,13 @@ export async function DELETE(
  * ✏️ PUT /api/products/[id]
  * Update product info
  */
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
     await connectDB();
-    const { id } = params;
+    const { id } = await params;
     const formData = await req.formData();
 
     const product = await Product.findById(id);

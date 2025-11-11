@@ -1,11 +1,60 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
+import { Suspense, useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import Image from "next/image";
+import { Product } from "@/types/product";
+import Loader from "@/components/Ui/Loader";
 
+// This page depends on runtime URL search params and client-only APIs
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 export default function CheckoutPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center ">
+          <Loader message="Loading" words={["checkout", "totals", "shipping"]} />
+        </div>
+      }
+    >
+      <CheckoutContent />
+    </Suspense>
+  );
+}
+
+function CheckoutContent() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isGuest, setIsGuest] = useState(false);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const searchParams = useSearchParams();
+  const productId = searchParams.get("product");
+
+  // ✅ Fetch product by ID
+  useEffect(() => {
+    async function fetchProduct() {
+      if (!productId) return;
+      try {
+        const res = await fetch(`/api/client/products/${productId}`);
+        const data = await res.json();
+        if (data.success && data.product) {
+          setProduct(data.product);
+        } else {
+          setProduct(null);
+        }
+      } catch (err) {
+        console.error("Error fetching product:", err);
+        setProduct(null);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProduct();
+  }, [productId]);
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -24,9 +73,9 @@ export default function CheckoutPage() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
+      [name]: type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
     }));
   };
 
@@ -37,7 +86,6 @@ export default function CheckoutPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Login logic here
     setCurrentStep(2);
   };
 
@@ -46,11 +94,55 @@ export default function CheckoutPage() {
     setCurrentStep(3);
   };
 
-  const proceedToPayment = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle final submission
-    console.log("Checkout completed", formData);
-  };
+  const proceedToPayment = async (e: React.FormEvent) => {
+  e.preventDefault();
+  if (!product) {
+    alert("❌ Product not found.");
+    return;
+  }
+
+  try {
+    const orderData = {
+      productId: product._id,
+      productName: product.name,
+      price: product.price,
+      quantity: 1,
+      email: formData.email,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      addressLine1: formData.addressLine1,
+      addressLine2: formData.addressLine2,
+      city: formData.city,
+      postcode: formData.postcode,
+      country: formData.country,
+    };
+
+    const res = await fetch("/api/client/orders", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(orderData),
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      alert("✅ Order placed successfully!");
+      console.log("Order:", data.order);
+    } else {
+      alert("❌ Failed to place order: " + data.error);
+    }
+  } catch (err) {
+    console.error("Error placing order:", err);
+    alert("❌ Something went wrong.");
+  }
+};
+
+  if (loading)
+    return (
+      <div className="min-h-screen flex items-center justify-center ">
+        <Loader message="Fetching" words={["orders", "customers", "reports"]} />
+      </div>
+    );
 
   return (
     <div className="min-h-screen text-[#1A1A1A] bg-gray-50 py-8">
@@ -112,21 +204,6 @@ export default function CheckoutPage() {
                         required
                       />
                     </div>
-                    <div className="flex items-center justify-between">
-                      <label className="flex items-center">
-                        <input
-                          type="checkbox"
-                          name="rememberMe"
-                          checked={formData.rememberMe}
-                          onChange={handleInputChange}
-                          className="mr-2"
-                        />
-                        <span className="text-sm">Remember Me</span>
-                      </label>
-                      <Link href="#" className="text-sm text-blue-600 hover:underline">
-                        Forget Password?
-                      </Link>
-                    </div>
                     <button
                       type="submit"
                       className="w-full bg-black text-white py-3 px-6 rounded-md hover:bg-gray-800 transition-colors"
@@ -151,8 +228,7 @@ export default function CheckoutPage() {
                   <h2 className="text-2xl font-bold mb-6">New Customers</h2>
                   <div className="space-y-4">
                     <p className="text-gray-600">
-                      You can checkout without creating an account. You will have a chance to create
-                      an account after you've placed the order.
+                      You can checkout without creating an account.
                     </p>
                     <button
                       onClick={handleGuestCheckout}
@@ -169,145 +245,37 @@ export default function CheckoutPage() {
               <div className="bg-white p-8 rounded-lg shadow-sm">
                 <h2 className="text-2xl font-bold mb-6">Shipping Information</h2>
                 <form onSubmit={proceedToShipping} className="space-y-6">
-                  {/* Contact Information */}
+                  {/* Contact Info */}
                   <div>
-                    <h3 className="text-lg font-semibold mb-4">Contact Information</h3>
-                    <div className="space-y-4">
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Email *</label>
-                        <input
-                          type="email"
-                          name="email"
-                          value={formData.email}
-                          onChange={handleInputChange}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                          required
-                        />
-                      </div>
-                    </div>
+                    <label className="block text-sm font-medium mb-2">Email *</label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                      required
+                    />
                   </div>
 
-                  {/* Billing Address */}
+                  {/* Address */}
                   <div>
-                    <h3 className="text-lg font-semibold mb-4">BILLING ADDRESS</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium mb-2">First Name *</label>
-                        <input
-                          type="text"
-                          name="firstName"
-                          value={formData.firstName}
-                          onChange={handleInputChange}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Last Name *</label>
-                        <input
-                          type="text"
-                          name="lastName"
-                          value={formData.lastName}
-                          onChange={handleInputChange}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                          required
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-4 mt-4">
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Country *</label>
-                        <select
-                          name="country"
-                          value={formData.country}
-                          onChange={handleInputChange}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                          required
-                        >
-                          <option value="United Kingdom">United Kingdom</option>
-                          {/* Add more countries */}
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Address Line 1 *</label>
-                        <input
-                          type="text"
-                          name="addressLine1"
-                          value={formData.addressLine1}
-                          onChange={handleInputChange}
-                          placeholder="Start typing street address and house number"
-                          className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Address Line 2</label>
-                        <input
-                          type="text"
-                          name="addressLine2"
-                          value={formData.addressLine2}
-                          onChange={handleInputChange}
-                          placeholder="Address Line 2"
-                          className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                        />
-                      </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-sm font-medium mb-2">City / Suburb *</label>
-                          <input
-                            type="text"
-                            name="city"
-                            value={formData.city}
-                            onChange={handleInputChange}
-                            placeholder="City / Suburb"
-                            className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                            required
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium mb-2">Zip / Postcode *</label>
-                          <input
-                            type="text"
-                            name="postcode"
-                            value={formData.postcode}
-                            onChange={handleInputChange}
-                            placeholder="Zip / Postcode"
-                            className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                            required
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Mobile Phone *</label>
-                        <div className="flex">
-                          <div className="w-20 px-3 py-3 border border-gray-300 border-r-0 rounded-l-md bg-gray-50 flex items-center justify-center">
-                            +44
-                          </div>
-                          <input
-                            type="tel"
-                            name="mobilePhone"
-                            value={formData.mobilePhone}
-                            onChange={handleInputChange}
-                            placeholder="Mobile Phone"
-                            className="flex-1 px-4 py-3 border border-gray-300 rounded-r-md focus:outline-none focus:ring-2 focus:ring-black"
-                            required
-                          />
-                        </div>
-                      </div>
-                    </div>
+                    <label className="block text-sm font-medium mb-2">Address Line 1 *</label>
+                    <input
+                      type="text"
+                      name="addressLine1"
+                      value={formData.addressLine1}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                      required
+                    />
                   </div>
-
-                  <p className="text-sm text-gray-600">
-                    The total amount you pay includes all applicable customs duties & taxes.
-                    We guarantee no additional charges on delivery.
-                  </p>
 
                   <button
                     type="submit"
                     className="w-full bg-black text-white py-3 px-6 rounded-md hover:bg-gray-800 transition-colors"
                   >
-                    Continue to Shipping
+                    Continue to Payment
                   </button>
                 </form>
               </div>
@@ -316,64 +284,7 @@ export default function CheckoutPage() {
             {currentStep === 3 && (
               <div className="bg-white p-8 rounded-lg shadow-sm">
                 <h2 className="text-2xl font-bold mb-6">Payment</h2>
-
-                {/* Express Checkout */}
-                <div className="mb-8">
-                  <h3 className="text-lg font-semibold mb-4">EXPRESS CHECKOUT</h3>
-                  <div className="flex space-x-4">
-                    <button className="flex-1 border border-gray-300 py-3 px-4 rounded-md hover:border-gray-400 transition-colors">
-                      PayPal
-                    </button>
-                    <button className="flex-1 border border-gray-300 py-3 px-4 rounded-md hover:border-gray-400 transition-colors">
-                      amazon pay
-                    </button>
-                  </div>
-                </div>
-
-                <div className="relative mb-8">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-gray-300" />
-                  </div>
-                  <div className="relative flex justify-center text-sm">
-                    <span className="px-2 bg-white text-gray-500">Or</span>
-                  </div>
-                </div>
-
-                {/* Payment Form */}
-                <form onSubmit={proceedToPayment} className="space-y-6">
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4">C Pay</h3>
-                    {/* Add payment form fields here */}
-                    <div className="space-y-4">
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Card Number</label>
-                        <input
-                          type="text"
-                          placeholder="1234 5678 9012 3456"
-                          className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                        />
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-sm font-medium mb-2">Expiry Date</label>
-                          <input
-                            type="text"
-                            placeholder="MM/YY"
-                            className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium mb-2">CVV</label>
-                          <input
-                            type="text"
-                            placeholder="123"
-                            className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
+                <form onSubmit={proceedToPayment}>
                   <button
                     type="submit"
                     className="w-full bg-black text-white py-3 px-6 rounded-md hover:bg-gray-800 transition-colors"
@@ -385,53 +296,49 @@ export default function CheckoutPage() {
             )}
           </div>
 
-          {/* Right Column - Order Summary */}
+          {/* ✅ Right Column - Order Summary */}
           <div className="bg-white p-8 rounded-lg shadow-sm h-fit">
             <h2 className="text-2xl font-bold mb-6">ORDER SUMMARY</h2>
 
-            {/* Product Item */}
-            <div className="border-b border-gray-200 pb-6 mb-6">
-              <div className="flex justify-between items-start">
-                <div>
-                  <h4 className="font-semibold">Fabbella Tiny Take Bag</h4>
-                  <p className="text-sm text-gray-600">Colour: Silver</p>
-                  <p className="text-sm text-gray-600">Size: OS</p>
-                  <p className="text-sm text-gray-600">Quantity: 1</p>
+            {!product ? (
+              <p className="text-gray-500">No product found.</p>
+            ) : (
+              <div className="flex justify-between items-start border-b border-gray-200 pb-6 mb-6">
+                <div className="flex items-center gap-4">
+                  <div className="relative w-16 h-16 rounded-md overflow-hidden">
+                    <Image
+                      src={product.images[0]}
+                      alt={product.name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold">{product.name}</h4>
+                    <p className="text-sm text-gray-600">{product.category}</p>
+                    <p className="text-sm text-gray-600">Quantity: 1</p>
+                  </div>
                 </div>
-                <span className="font-semibold">£775.00</span>
+                <span className="font-semibold">${product.price.toFixed(2)}</span>
               </div>
-            </div>
+            )}
 
-            {/* Promotion Code */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium mb-2">Please enter promotion code</label>
-              <div className="flex space-x-2">
-                <input
-                  type="text"
-                  placeholder="Promotion code"
-                  className="flex-1 px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                />
-                <button className="px-6 py-3 border border-black text-black rounded-md hover:bg-gray-50 transition-colors">
-                  Apply
-                </button>
+            {product && (
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span>Items total</span>
+                  <span>${product.price.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Shipping</span>
+                  <span>Free</span>
+                </div>
+                <div className="border-t border-gray-200 pt-3 flex justify-between font-bold text-lg">
+                  <span>Total</span>
+                  <span>${product.price.toFixed(2)}</span>
+                </div>
               </div>
-            </div>
-
-            {/* Order Totals */}
-            <div className="space-y-3">
-              <div className="flex justify-between">
-                <span>Items total</span>
-                <span>£775.00</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Shipping</span>
-                <span>Free</span>
-              </div>
-              <div className="border-t border-gray-200 pt-3 flex justify-between font-bold text-lg">
-                <span>Total</span>
-                <span>£775.00</span>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

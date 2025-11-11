@@ -30,7 +30,10 @@ export default function NewArrivals() {
       <h2 className="text-5xl font-bold mt-10 mb-10">New Arrivals</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
         {menProducts.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard
+            key={product.id}
+            product={{ ...product, _id: String(product.id) }}
+          />
         ))}
       </div>
     </section>

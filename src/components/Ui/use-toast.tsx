@@ -8,7 +8,7 @@ export interface ToastProps {
   id?: number;
   title?: string;
   description?: string;
-  variant?: "default" | "destructive";
+  variant?: "default" | "destructive" | "success" | "warning";
   duration?: number;
   className?: string;
 }

@@ -1,5 +1,6 @@
 // data/products.ts
 export interface Product {
+  _id: string;
   id: number;
   name: string;
   price: number;
@@ -18,6 +19,7 @@ export interface Product {
 
 export const products: Product[] = [
   {
+    _id: "1",
     id: 1,
     name: "Classic Men's T-Shirt",
     price: 19.99,
@@ -39,6 +41,7 @@ export const products: Product[] = [
     },
   },
   {
+    _id: "2",
     id: 2,
     name: "Elegant Women's Dress",
     price: 49.99,
@@ -58,6 +61,7 @@ export const products: Product[] = [
     },
   },
   {
+    _id: "3",
     id: 3,
     name: "Trendy Sneakers",
     price: 59.99,
