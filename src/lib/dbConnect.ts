@@ -30,7 +30,7 @@ export default async function dbConnect() {
 -------------------------------------------- */
 
 let client: MongoClient;
-let clientPromise: Promise<MongoClient>;
+let clientPromise: Promise<MongoClient> | undefined;
 
 declare global {
   // Allow reuse of global variable in dev mode
@@ -38,24 +38,29 @@ declare global {
   var _mongoClientPromise: Promise<MongoClient> | undefined;
 }
 
-if (!process.env.MONGO_URI) {
-  throw new Error('Please define the MONGO_URI environment variable inside .env.local');
-}
+// Avoid throwing during module import so builds don't fail when MONGO_URI is absent.
+// Instead, defer the error until a DB operation is actually attempted.
+if (process.env.MONGO_URI) {
+  const uri = process.env.MONGO_URI;
+  const options = {};
 
-const uri = process.env.MONGO_URI;
-const options = {};
-
-if (process.env.NODE_ENV === 'development') {
-  if (!global._mongoClientPromise) {
+  if (process.env.NODE_ENV === 'development') {
+    if (!global._mongoClientPromise) {
+      client = new MongoClient(uri, options);
+      global._mongoClientPromise = client.connect();
+    }
+    clientPromise = global._mongoClientPromise!;
+  } else {
     client = new MongoClient(uri, options);
-    global._mongoClientPromise = client.connect();
+    clientPromise = client.connect();
   }
-  clientPromise = global._mongoClientPromise!;
-} else {
-  client = new MongoClient(uri, options);
-  clientPromise = client.connect();
 }
 
 // ✅ Fix: export a function returning the client (NextAuth expects a function)
-export const getClient = async () => await clientPromise;
+export const getClient = async () => {
+  if (!process.env.MONGO_URI || !clientPromise) {
+    throw new Error('Please define the MONGO_URI environment variable inside .env.local');
+  }
+  return await clientPromise;
+};
 export { clientPromise };
