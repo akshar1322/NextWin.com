@@ -10,6 +10,7 @@ import { FaAmazon, FaShoppingBag } from "react-icons/fa";
 import { SiFlipkart } from "react-icons/si";
 import { Product } from "@/types/product";
 import Loader from "@/components/Ui/Loader";
+import { getBaseUrl } from "@/lib/getBaseUrl";
 
 export default function ProductDetailsPage() {
   const { id } = useParams();
@@ -22,7 +23,7 @@ export default function ProductDetailsPage() {
   useEffect(() => {
     async function fetchProduct() {
       try {
-        const res = await fetch(`/api/client/products/${id}`);
+        const res = await fetch(`${getBaseUrl()}/api/client/products/${id}`);
         const data = await res.json();
 
         if (data.success && data.product) {

@@ -3,24 +3,14 @@ import { Product } from "@/types/product";
 import Navbar from "../../components/Ui/Navbar/Navbar";
 import Footer from "../../components/Ui/Footer";
 import BannerSlider from "@/components/Elements/sliders/propBannerSlider";
+import { getBaseUrl } from "@/lib/getBaseUrl";
 
 const menSlides = [
   { id: 1, image: "/images/banners/1600w-IM0sQ6hr9Kc (1).jpg", link: "#" },
   { id: 2, image: "/images/banners/emma-swoboda-qKaioqt8mo4-unsplash.jpg", link: "#" },
 ];
 
-const getBaseUrl = () => {
-  const explicitEnvUrl =
-    process.env.NEXT_PUBLIC_BASE_URL ||
-    process.env.NEXTAUTH_URL ||
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "");
 
-  if (explicitEnvUrl) {
-    return explicitEnvUrl;
-  }
-
-  return "http://localhost:3000";
-};
 
 export default async function ShopPage({ searchParams }: { searchParams: { category?: string; search?: string } }) {
   const category = searchParams.category || "";
