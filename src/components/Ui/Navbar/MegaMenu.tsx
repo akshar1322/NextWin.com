@@ -13,22 +13,22 @@ export default function MegaMenu({ category }: MegaMenuProps) {
       title: "Ready to Wear",
       items: [
         "New Arrivals",
-        "Dresses",
-        "Coats and Jackets",
-        "Shirts and Tops",
+        "Hoodies",
+        "Shirts",
+        "Shackets",
         "Tailoring",
         "Knitwear",
       ],
       image: "/images/Nav_Img/2_20251102_212827_0001.png",
     },
-    accessories: {
-      title: "Accessories",
-      items: ["Bags", "Belts", "Jewelry", "Hats", "Scarves", "Eyewear"],
+    Tops: {
+      title: "Tops",
+      items: ["Women's Collection", "Sweatshirts", "Bottoms","T-Shirts",],
       image: "/images/Nav_Img/8_20251102_183856_0007.png",
     },
     newIn: {
       title: "New In",
-      items: ["Latest Arrivals", "Trending Now", "Limited Edition"],
+      items: ["Latest Arrivals", "Trending Now", "Limited Edition","New Arrivals",],
       image: "/images/Nav_Img/2_20251102_183856_0001.png",
     },
   };
@@ -38,7 +38,7 @@ export default function MegaMenu({ category }: MegaMenuProps) {
   if (!data) return null;
 
   return (
-    <div className="w-full bg-white text-black">
+    <div className="w-full bg-white capitalize text-black">
       <div
         className="
           grid grid-cols-1
@@ -49,6 +49,7 @@ export default function MegaMenu({ category }: MegaMenuProps) {
           px-6
           sm:px-10
           py-8
+          capitalize
         "
       >
         {/* --- LEFT: Links --- */}
@@ -65,6 +66,7 @@ export default function MegaMenu({ category }: MegaMenuProps) {
                 border-b border-transparent
                 hover:border-black
                 pb-1
+                capitalize
               "
             >
               {item}
@@ -80,7 +82,7 @@ export default function MegaMenu({ category }: MegaMenuProps) {
             fill
             className="object-cover hover:scale-105 transition-transform duration-300"
           />
-          <div className="absolute bottom-2 left-2 bg-white/90 px-3 py-1 text-xs sm:text-sm font-semibold rounded">
+          <div className="absolute bottom-2 left-2 capitalize bg-white/90 px-3 py-1 text-xs sm:text-sm font-semibold rounded">
             {data.title}
           </div>
         </div>

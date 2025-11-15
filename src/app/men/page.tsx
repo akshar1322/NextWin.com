@@ -7,10 +7,7 @@ import BannerSlider from "@/components/Elements/sliders/propBannerSlider";
 import ProductCard from "@/components/cards/ProductCard";
 
 
-const menSlides = [
-  { id: 1, image: "/images/banners/1600w-IM0sQ6hr9Kc (1).jpg", link: "#" },
-  { id: 2, image: "/images/banners/emma-swoboda-qKaioqt8mo4-unsplash.jpg", link: "#" },
-];
+
 
 export default function MenPage() {
   const [products, setProducts] = useState<any[]>([]);
@@ -35,7 +32,11 @@ export default function MenPage() {
   return (
     <main className="bg-[#EEEEEE] overflow-hidden min-h-screen text-black">
       <Navbar />
-        <BannerSlider slides={menSlides} />
+          <BannerSlider
+          height="lg:h-[70vh]"
+          tag="featured"
+          limit={4}
+        />
 
 
       {/* --- Product Section --- */}

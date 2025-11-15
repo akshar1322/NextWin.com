@@ -12,13 +12,9 @@ import NavUser from "./NavUser";
 const navLinks = [
   { title: "New In", href: "#", hasMenu: true },
   { title: "Ready to Wear", href: "#", hasMenu: true },
-  { title: "Handbags", href: "#" },
-  { title: "Shoes", href: "#" },
-  { title: "Accessories", href: "#", hasMenu: true },
-  { title: "Adidas", href: "#" },
-  { title: "Kids", href: "#" },
-  { title: "Gift Guide", href: "#" },
-  { title: "Stella's World", href: "#" },
+  { title: "Trinted T-shirt", href: "/shop" },
+  { title: "Costmize T-shirt", href: "/contact-Us" },
+  // { title: "Tops", href: "#", hasMenu: true },
 ];
 
 export default function Navbar() {
@@ -35,21 +31,21 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="relative text-black z-50 border-b border-gray-200 bg-white">
+    <nav className="relative capitalize text-black z-50 border-b border-gray-200 bg-white">
       {/* --- TOP BAR --- */}
       <div className="w-full bg-gray-100 text-black text-xs py-2 tracking-wide flex items-center justify-between px-4 sm:px-6">
         <div>Shopping in India 🇮🇳</div>
 
         {/* Icons on Right */}
-        <div className="flex items-center gap-5">
-          <button className="text-black hover:text-gray-700">
-            <i className="ri-search-line text-base" />
+        <div className="flex items-center  gap-5">
+          <button className="text-black cursor-pointer hover:text-gray-700">
+            <i className="ri-search-line cursor-pointer text-base" />
           </button>
             {/* 👇 Insert NavUser here */}
            <NavUser />
           <Link
             href="/auth/createaccount"
-            className="flex items-center text-black hover:text-gray-700 gap-1"
+            className="flex items-center cursor-pointer text-black hover:text-gray-500 gap-1"
           >
             <i className="ri-user-line text-base" />
             <span>Create Account</span>

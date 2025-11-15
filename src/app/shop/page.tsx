@@ -5,10 +5,6 @@ import Footer from "../../components/Ui/Footer";
 import BannerSlider from "@/components/Elements/sliders/propBannerSlider";
 import { getBaseUrl } from "@/lib/getBaseUrl";
 
-const menSlides = [
-  { id: 1, image: "/images/banners/1600w-IM0sQ6hr9Kc (1).jpg", link: "#" },
-  { id: 2, image: "/images/banners/emma-swoboda-qKaioqt8mo4-unsplash.jpg", link: "#" },
-];
 
 
 
@@ -52,7 +48,11 @@ export default async function ShopPage({ searchParams }: { searchParams: { categ
       <main className='bg-[#EEEEEE] overflow-hidden'>
         <Navbar/>
         <div className='mt-6 sm:mt-14 lg:mt-16'>
-          <BannerSlider slides={menSlides} />
+          <BannerSlider
+            height="lg:h-[70vh]"
+            tag="featured"
+            limit={4}
+          />
         </div>
 
         <section className="w-full px-8 bg-[#EEEEEE] text-black py-16">

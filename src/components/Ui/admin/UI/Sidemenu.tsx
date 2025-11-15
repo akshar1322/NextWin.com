@@ -31,7 +31,7 @@ export default function Sidebar() {
       name: "Orders",
       icon: "ri-shopping-cart-line",
       href: "/admin/orders",
-      badge: 12,
+      badge: null,
       submenu: null
     },
     {
@@ -51,6 +51,13 @@ export default function Sidebar() {
       name: "Analytics",
       icon: "ri-bar-chart-line",
       href: "/admin/analytics",
+      badge: null,
+      submenu: null
+    },
+    {
+      name: "Banners",
+      icon: "ri-image-line",
+      href: "/admin/BannerManagement",
       badge: null,
       submenu: null
     },
