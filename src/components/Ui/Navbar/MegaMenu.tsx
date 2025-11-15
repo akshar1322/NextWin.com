@@ -19,17 +19,17 @@ export default function MegaMenu({ category }: MegaMenuProps) {
         "Tailoring",
         "Knitwear",
       ],
-      image: "/images/readytowear.jpg",
+      image: "/images/Nav_Img/2_20251102_212827_0001.png",
     },
     accessories: {
       title: "Accessories",
       items: ["Bags", "Belts", "Jewelry", "Hats", "Scarves", "Eyewear"],
-      image: "/images/accessories.jpg",
+      image: "/images/Nav_Img/8_20251102_183856_0007.png",
     },
     newIn: {
       title: "New In",
       items: ["Latest Arrivals", "Trending Now", "Limited Edition"],
-      image: "/images/newin.jpg",
+      image: "/images/Nav_Img/2_20251102_183856_0001.png",
     },
   };
 

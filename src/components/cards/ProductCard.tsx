@@ -3,13 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { Product } from "@/data/products";
+import { Product } from "@/types/product";
 
 export default function ProductCard({ product }: { product: Product }) {
   const [hover, setHover] = useState(false);
 
   return (
-    <Link href={`/shop/${product.id}`}>
+    <Link href={`/shop/${product._id}`}>
       <div
         className="rounded-xl overflow-hidden cursor-pointer transition-transform hover:scale-105"
         onMouseEnter={() => setHover(true)}

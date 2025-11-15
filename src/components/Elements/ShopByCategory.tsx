@@ -8,7 +8,7 @@ const categories = [
   {
     name: "New Arrivals",
     href: "/newarrivals",
-    img: "/images/prodcts/p1.jpg",
+    img: "/images/Nav_Img/2_20251102_183856_0001.png",
     bg: "bg-[#EEEEEE]",
     hover: "hover:bg-green-200",
     btnHover: "group-hover:bg-green-600 group-hover:text-white",
@@ -24,7 +24,7 @@ const categories = [
   {
     name: "Men",
     href: "/men",
-    img: "/images/prodcts/p3.jpg",
+    img: "/images/Nav_Img/8_20251102_183856_0007.png",
     bg: "bg-[#EEEEEE]",
     hover: "hover:bg-blue-200",
     btnHover: "group-hover:bg-blue-600 group-hover:text-white",

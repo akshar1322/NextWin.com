@@ -4,7 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
-const version = "[ V SX-ACT 01r.mx.00.01 ]";
+const version = "[ V SX-ACT 01r.mx.05.01 ]";
 
 // 🔹 Footer Links Data
 const footerLinks = [
@@ -136,7 +136,7 @@ export default function Footer() {
             © {new Date().getFullYear()} by{" "}
             <span className="font-bold text-white">Next Win</span>. Built with{" "}
             <Link
-              href="https://splitxcom.vercel.app/"
+              href="https://splisxstudio.wixstudio.com/splisxstudio"
               target="_blank"
               className="underline hover:text-orange-500"
             >

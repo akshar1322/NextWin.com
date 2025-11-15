@@ -92,7 +92,7 @@
       const skip = (page - 1) * limit;
 
       // ✅ Build filter object
-      let filter: any = {};
+      const filter: any = {};
 
       if (category) {
         filter.category = category;

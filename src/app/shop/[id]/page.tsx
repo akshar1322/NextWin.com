@@ -1,23 +1,58 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import { products } from "@/data/products";
 import Navbar from "@/components/Ui/Navbar/Navbar";
 import Footer from "@/components/Ui/Footer";
-
 import { FaAmazon, FaShoppingBag } from "react-icons/fa";
 import { SiFlipkart } from "react-icons/si";
+import { Product } from "@/types/product";
+import Loader from "@/components/Ui/Loader";
+import { getBaseUrl } from "@/lib/getBaseUrl";
 
 export default function ProductDetailsPage() {
   const { id } = useParams();
-  const router = useRouter(); // ✅ Added router hook
-
-  const product = products.find((p) => p.id.toString() === id);
-  const [mainImage, setMainImage] = useState(product?.images[0]);
+  const router = useRouter();
+  const [product, setProduct] = useState<Product | null>(null);
+  const [mainImage, setMainImage] = useState<string | null>(null);
   const [openSection, setOpenSection] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchProduct() {
+      try {
+        const res = await fetch(`${getBaseUrl()}/api/client/products/${id}`);
+        const data = await res.json();
+
+        if (data.success && data.product) {
+          const fetched = data.product;
+          setProduct(fetched);
+          setMainImage(fetched.images?.[0] || null);
+        } else {
+          setProduct(null);
+        }
+
+      } catch (err) {
+        console.error("Error fetching product:", err);
+        setProduct(null);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (id) fetchProduct();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader message="Fetching" words={["orders", "customers", "reports"]} />
+
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -85,7 +120,7 @@ export default function ProductDetailsPage() {
               </button>
 
               <button
-                onClick={() => router.push(`/checkout?product=${product.id}`)} // ✅ Fixed Buy Now action
+                onClick={() => router.push(`/checkout?product=${product._id}`)}
                 className="flex-1 bg-[#FF9900] text-black text-base sm:text-lg font-semibold py-3 rounded-xl hover:bg-[#e68a00] transition"
               >
                 Buy Now
@@ -94,7 +129,7 @@ export default function ProductDetailsPage() {
 
             {/* Affiliate Links */}
             <div className="flex gap-4 mt-6 flex-wrap">
-              {product.affiliates.amazon && (
+              {product.affiliates?.amazon && (
                 <Link
                   href={product.affiliates.amazon}
                   target="_blank"
@@ -103,7 +138,7 @@ export default function ProductDetailsPage() {
                   <FaAmazon className="text-xl text-yellow-600" /> Amazon
                 </Link>
               )}
-              {product.affiliates.flipkart && (
+              {product.affiliates?.flipkart && (
                 <Link
                   href={product.affiliates.flipkart}
                   target="_blank"
@@ -112,7 +147,7 @@ export default function ProductDetailsPage() {
                   <SiFlipkart className="text-xl text-blue-600" /> Flipkart
                 </Link>
               )}
-              {product.affiliates.myntra && (
+              {product.affiliates?.myntra && (
                 <Link
                   href={product.affiliates.myntra}
                   target="_blank"
